@@ -1,7 +1,7 @@
 require_relative 'lib/olivander/version'
 
 Gem::Specification.new do |spec|
-  spec.name        = 'olivander'
+  spec.name        = 'five-two-nw-olivander'
   spec.version     = Olivander::VERSION
   spec.authors     = ['Eric Dennis']
   spec.email       = ['devops@5and2northwest.com']
