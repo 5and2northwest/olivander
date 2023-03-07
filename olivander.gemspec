@@ -24,5 +24,8 @@ Gem::Specification.new do |spec|
     Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md', 'CHANGELOG.md']
   end
 
+  spec.add_dependency 'chartkick'
+  spec.add_dependency 'effective_datatables'
+  spec.add_dependency 'haml-rails', '~> 2.0'
   spec.add_dependency 'rails', '>= 7.0.4.2'
 end
