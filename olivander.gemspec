@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata['homepage_uri']     = spec.homepage
   spec.metadata['source_code_uri']  = 'https://github.com/5and2northwest/olivander'
-  spec.metadata['changelog_uri']    = 'https://github.com/5and2northwest/olivander/CHANGELOG.md'
+  spec.metadata['changelog_uri']    = 'https://github.com/5and2northwest/olivander/blob/main/CHANGELOG.md'
   spec.metadata['bug_tracker_uri']  = 'https://github.com/5and2northwest/olivander/issues'
   spec.metadata['wiki_uri']         = 'https://github.com/5and2northwest/olivander/wiki'
 
@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'chartkick'
   spec.add_dependency 'effective_datatables'
+  spec.add_dependency 'effective_resources'
   spec.add_dependency 'haml-rails', '~> 2.0'
   spec.add_dependency 'rails', '>= 7.0.4.2'
 end

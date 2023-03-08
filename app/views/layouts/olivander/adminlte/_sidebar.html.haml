@@ -1,0 +1,24 @@
+/ Main Sidebar Container
+%aside.main-sidebar.sidebar-dark-primary.elevation-4{ data: { controller: 'left-nav' }}
+  / Brand Logo
+  %a.brand-link.bg-info{:href => "/"}
+    %img.brand-image.img-circle.elevation-3{:alt => @context.logo_alt, :src => 'image_path("logo.png")', :style => "opacity: .8"}/
+    %span.brand-text.font-weight-light= @context.page_title
+  / Sidebar
+  .sidebar
+    / Sidebar user panel (optional)
+    .user-panel.mt-3.pb-3.mb-3.d-flex
+      .image
+        %img.img-circle.elevation-2{:alt => "User Image", :src => image_path(user_image_path(nil))}/
+      .info
+        %a.d-block{:href => "#"}= 'current_user'
+    / SidebarSearch Form
+    .form-inline
+      .input-group{"data-widget" => "sidebar-search"}
+        %input.form-control.form-control-sidebar{"aria-label" => "Search Menu Items", :placeholder => "Search Menu Items", :type => "search"}/
+        .input-group-append
+          %button.btn.btn-sidebar
+            %i.fas.fa-search.fa-fw
+    / Sidebar Menu
+    %nav.mt-2
+      %ul.nav.nav-pills.nav-sidebar.nav-compact.flex-column{"data-accordion" => "false", "data-widget" => "treeview", :role => "menu"}

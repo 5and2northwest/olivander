@@ -1,0 +1,5 @@
+require 'effective_resources'
+require 'effective_datatables'
+require 'haml-rails'
+require 'chartkick'
+require 'olivander'

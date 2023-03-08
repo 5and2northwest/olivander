@@ -4,6 +4,7 @@ PATH
     five-two-nw-olivander (0.1.0)
       chartkick
       effective_datatables
+      effective_resources
       haml-rails (~> 2.0)
       rails (>= 7.0.4.2)
 

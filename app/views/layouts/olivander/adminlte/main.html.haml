@@ -1,0 +1,17 @@
+!!!
+%html
+  - @context = OpenStruct.new({ page_title: 'title', logo_alt: 'logo alt' })
+  = render partial: 'layouts/olivander/adminlte/head'
+  - sidebar_collapse = cookies['lte.pushmenu.collapsed'] == 'true' ? 'sidebar-collapse' : ''
+  %body.hold-transition.sidebar-mini.layout-fixed{ class: sidebar_collapse }
+    .wrapper
+      / Preloader
+      -# .preloader.flex-column.justify-content-center.align-items-center
+      -#   %img.animation__shake{:alt => "FFES Logo", :height => "60", :src => image_path("logo.gif")}
+      = render partial: 'layouts/olivander/adminlte/navbar'
+      = render partial: 'layouts/olivander/adminlte/sidebar'
+      -# = render partial: 'layouts/olivander/adminlte/content'
+      = render partial: @content_partial || 'layouts/olivander/adminlte/content', locals: { content: yield }
+      = render partial: 'layouts/olivander/adminlte/flashes'
+      = render partial: 'layouts/olivander/adminlte/footer'
+      = render partial: 'layouts/olivander/adminlte/control_sidebar'

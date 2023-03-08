@@ -1,0 +1,11 @@
+%head
+  %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %title= page_title
+  %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
+  = csrf_meta_tags
+  = csp_meta_tag
+  %link{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback' }
+  = javascript_include_tag "https://www.gstatic.com/charts/loader.js"
+  = stylesheet_link_tag "adminlte", "data-turbo-track": "reload"
+  = javascript_include_tag "adminlte", "data-turbo-track": "reload"
+  = javascript_importmap_tags
