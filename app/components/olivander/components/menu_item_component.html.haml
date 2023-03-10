@@ -1,0 +1,19 @@
+- if menu_item.visible
+  - if menu_item.href
+    %li.nav-item
+      %a.nav-link{href: menu_item.href}
+        - if menu_item.icon_class
+          %i.nav-icon{class: menu_item.icon_class}
+        %p
+          = menu_item.text
+          - if menu_item.submenu_items.size.positive?
+            %i.fas.fa-angle-left.right
+          - menu_item.badges.each do |badge|
+            %span.badge.right{ class: "badge-#{badge.badge_class}" }
+              = badge.text
+      - if menu_item.submenu_items.size.positive?
+        %ul.nav.nav-treeview
+          - menu_item.submenu_items.each do |item|
+            = render Olivander::Components::MenuItemComponent.new(item)
+  - else
+    %li.nav-header= menu_item.text.upcase

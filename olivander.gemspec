@@ -29,4 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'effective_resources'
   spec.add_dependency 'haml-rails', '~> 2.0'
   spec.add_dependency 'rails', '>= 3.2.0'
+  spec.add_dependency 'view_component'
 end

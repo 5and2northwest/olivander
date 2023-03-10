@@ -18,6 +18,7 @@
  *= require 'adminlte/plugins/daterangepicker/daterangepicker'
  *= require 'adminlte/plugins/summernote/summernote-bs4.min'
  *= require 'adminlte/plugins/fontawesome-free/css/all.min'
+ *= require effective_datatables
  *= require_tree .
  *= require_self
  */

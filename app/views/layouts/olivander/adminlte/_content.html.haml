@@ -2,7 +2,11 @@
   %section.content-header
     .container-fluid
       .row.mb-2
-        %h1= page_title
+        .col-sm-6
+          %h1= page_title
+        .col-sm-6
+          %ol.breadcrumb.float-sm-right
+            = content_for(:breadcrumb)
   %section.content
     .container-fluid
       = content

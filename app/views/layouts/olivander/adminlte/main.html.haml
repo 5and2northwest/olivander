@@ -1,6 +1,6 @@
 !!!
 %html
-  - @context = OpenStruct.new({ page_title: 'title', logo_alt: 'logo alt' })
+  - @context ||= Olivander::ApplicationContext.default
   = render partial: 'layouts/olivander/adminlte/head'
   - sidebar_collapse = cookies['lte.pushmenu.collapsed'] == 'true' ? 'sidebar-collapse' : ''
   %body.hold-transition.sidebar-mini.layout-fixed{ class: sidebar_collapse }
@@ -15,3 +15,4 @@
       = render partial: 'layouts/olivander/adminlte/flashes'
       = render partial: 'layouts/olivander/adminlte/footer'
       = render partial: 'layouts/olivander/adminlte/control_sidebar'
+    = content_for :javascript

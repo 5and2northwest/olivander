@@ -14,3 +14,9 @@ gem "sprockets-rails"
 gem 'chartkick'
 gem 'effective_datatables'
 gem 'haml-rails', '~> 2.0'
+gem 'view_component'
+
+group :development do
+  gem 'pry-rails'
+  gem 'pry-byebug'
+end

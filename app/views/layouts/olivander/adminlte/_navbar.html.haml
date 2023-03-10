@@ -5,10 +5,9 @@
     %li.nav-item
       %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button"}
         %i.fas.fa-bars
-    %li.nav-item.d-none.d-sm-inline-block
-      %a.nav-link{:href => "/foo"} Foo
-    %li.nav-item.d-none.d-sm-inline-block
-      %a.nav-link{:href => "/system"} System
+    - @context.visible_modules.each do |menu_item|
+      %li.nav-item.d-none.d-sm-inline-block
+        = link_to menu_item.text, menu_item.href, class: 'nav-link'
   / Right navbar links
   %ul.navbar-nav.ml-auto
     / Navbar Search
