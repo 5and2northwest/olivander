@@ -24,3 +24,38 @@
       %ul.nav.nav-pills.nav-sidebar.nav-compact.flex-column{"data-accordion" => "false", "data-widget" => "treeview", :role => "menu"}
         - @context.menu_items.each do |menu_item|
           = render Olivander::Components::MenuItemComponent.new(menu_item)
+
+
+:javascript
+  $(document).ready(function(){
+    function getUrl() {
+      const reg = /\/new|\/[0-9]+[\/edit]*/,
+            url = "" + window.location;
+      return url.replace(reg, '');
+    }
+    const url = getUrl();
+
+    $('ul.nav-sidebar a').filter(function() {
+      return this.href == url;
+    }).addClass('active');
+
+    $('ul.nav-sidebar a').filter(function() {
+      return this.href == url;
+    }).parent().addClass('active');
+
+    $('ul.nav-treeview a').filter(function() {
+      return this.href == url;
+    }).parentsUntil(".sidebar-menu > .nav-treeview").addClass('menu-open');
+
+    $('ul.nav-treeview a').filter(function() {
+      return this.href == url;
+    }).addClass('active');
+
+    $('li.has-treeview a').filter(function() {
+      return this.href == url;
+    }).addClass('active');
+
+    $('ul.nav-treeview a').filter(function() {
+      return this.href == url;
+    }).parentsUntil(".sidebar-menu > .nav-treeview").children(0).addClass('active');
+  });
