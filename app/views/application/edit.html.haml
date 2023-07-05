@@ -3,9 +3,5 @@
 
 - if @resource
   .row
-    .col-8
-      %h1= @page_title
-    .col-4.text-right
-      = render_resource_buttons(@resource, edit: false)
-
-  = render_resource_form(@resource)
+    .col-12
+      = render_resource_form(@resource)

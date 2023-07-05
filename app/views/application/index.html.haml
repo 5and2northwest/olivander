@@ -4,7 +4,9 @@
   .col-12
     .card
       .card-header
-        %h1= @page_title
+        %h3.card-title= @page_title
+        .card-tools
+          = resource_form_actions(resource.klass, for_action: :index)
       .card-body
         - if @datatable
           = render_datatable(@datatable)
@@ -19,6 +21,5 @@
           %p effective_resources index view is not sure what to render.
           %p Define an @datatable, @#{resource.try(:plural_name) || 'a plural'}, or @#{resource.try(:name) || 'a singular'}.
           %p or include Effective::CrudController in your controller
-      .card-footer
-        = render_resource_buttons(resource.klass, (action ||= :index) => false)
+      -# .card-footer
 

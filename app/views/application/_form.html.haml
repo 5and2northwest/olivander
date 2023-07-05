@@ -1,0 +1,17 @@
+- read_only = action_name != 'edit'
+= simple_form_for(@resource) do |f|
+  .card
+    .card-header
+      .card-tools
+        = resource_form_actions(@resource, for_action: action_name.to_sym)
+    .card-body
+      =f.error_notification
+      =f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+      - @resource.auto_form_attributes.each do |a|
+        .row
+          .col-12
+            = f.input a, disabled: read_only
+    .card-footer.text-right
+      = link_to 'Cancel', @_effective_resource.action_path(:index), class: 'btn btn-secondary'
+      - unless read_only
+        = f.button :submit, class: 'btn btn-primary'

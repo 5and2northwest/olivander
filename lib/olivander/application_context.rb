@@ -1,6 +1,6 @@
 module Olivander
   class ApplicationContext
-    attr_accessor :name, :logo, :company, :menu_items
+    attr_accessor :name, :logo, :company, :menu_items, :route_builder
 
     def self.default
       ctx = ApplicationContext.new

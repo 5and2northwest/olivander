@@ -1,0 +1,3 @@
+= dropdown(variation: :dropleft, btn_class: btn_class) do
+  - authorized_resource_actions(resource, for_action: action_name).select{ |x| x.show_in_datatable }.each do |a|
+    = dropdown_link_to a.sym, { controller: a.controller, action: a.action, id: resource.id }
