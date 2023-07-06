@@ -3,7 +3,7 @@
   .card
     .card-header
       .card-tools
-        = resource_form_actions(@resource, for_action: action_name.to_sym)
+        = resource_form_actions(@context.route_builder, @resource, for_action: action_name.to_sym)
     .card-body
       =f.error_notification
       =f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?

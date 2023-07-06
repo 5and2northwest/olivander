@@ -1,15 +1,38 @@
 - resource = (@_effective_resource || Effective::Resource.new(controller_path))
 
+- if @datatable
+  - content_for :datatable do
+    = render_datatable(@datatable, charts: false)
+  - content_for :datatable_charts do
+    - keys = @datatable._charts.keys
+    - ks = keys.size
+    - if ks.positive?
+      %br
+      .row
+        - @datatable._charts.keys.each do |k|
+          %div{ class: "#{col_class_num('xl', ks, 3)} #{col_class_num('lg', ks, 2)} #{col_class_num('md', ks, 6)} #{col_class_num('sm', ks, 6)}"}
+            .card.card-secondary
+              .card-header
+                %h3.card-title= I18n.t([@datatable.class.name.underscore, 'charts', k].join('.'))
+                .card-tools.text-right
+                  %button.btn.btn-tool{ type: :button, 'data-card-widget': :maximize }
+                    %i.fas.fa-expand
+              .card-body
+                = render_datatable_chart(@datatable, k)
+
+- if @datatable
+  = content_for :datatable_charts
+
 .row
   .col-12
     .card
       .card-header
         %h3.card-title= @page_title
         .card-tools
-          = resource_form_actions(resource.klass, for_action: :index)
+          = resource_form_actions(@context.route_builder, resource.klass, for_action: :index)
       .card-body
         - if @datatable
-          = render_datatable(@datatable)
+          = content_for :datatable
 
         - elsif instance_variable_get('@' + resource.plural_name).respond_to?(:to_partial_path)
           = render instance_variable_get('@' + resource.plural_name)

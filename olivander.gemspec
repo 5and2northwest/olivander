@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency 'chartkick'
+  spec.add_dependency 'devise'
   spec.add_dependency 'effective_datatables'
   spec.add_dependency 'effective_resources'
   spec.add_dependency 'haml-rails', '~> 2.0'

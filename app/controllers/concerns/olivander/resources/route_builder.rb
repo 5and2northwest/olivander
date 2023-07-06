@@ -1,7 +1,9 @@
 module Olivander
   module Resources
     class ResourceAction
-      attr_accessor :sym, :action, :verb, :confirm, :turbo_frame, :collection, :controller, :crud_action, :show_in_form, :show_in_datatable, :no_route
+      attr_accessor :sym, :action, :verb, :confirm, :turbo_frame, :collection,
+                    :controller, :crud_action, :show_in_form, :show_in_datatable,
+                    :no_route, :path_helper
 
       def initialize(sym, action: nil, controller: nil, verb: :get, confirm: false, turbo_frame: nil, collection: false, crud_action: false,
                      show_in_form: true, show_in_datatable: true, no_route: false)
@@ -25,29 +27,43 @@ module Olivander
       def initialize(model, crud_actions)
         self.model = model
         self.actions = []
-        crud_actions.each do |ca|
-          actions << ResourceAction.new(ca, controller: model, crud_action: true)
+        %i[index new create edit show update destroy].each do |ca|
+          next unless crud_actions.include?(ca)
+          actions << ResourceAction.new(ca, controller: model, verb: resolve_crud_action_verb(ca), collection: resolve_crud_action_collection(ca), crud_action: true)
         end
+      end
+
+      def resolve_crud_action_verb(ca)
+        case ca
+        when :create
+          :post
+        when :update
+          :patch
+        when :destroy
+          :delete
+        else
+          :get
+        end
+      end
+
+      def resolve_crud_action_collection(ca)
+        %i[index new create].include?(ca)
       end
 
       def crud_actions
         actions.select{ |x| x.crud_action }
       end
 
-      def additional_actions
-        actions.select{ |x| !x.crud_action }
-      end
-
       def member_actions
-        additional_actions.select{ |x| !x.collection }
+        actions.select{ |x| !x.collection }
       end
 
       def collection_actions
-        additional_actions.select{ |x| x.collection }
+        actions.select{ |x| x.collection }
       end
 
       def datatable_bulk_actions
-        collection_actions.select{ |x| x.show_in_datatable }
+        collection_actions.select{ |x| x.show_in_datatable && !x.crud_action }
       end
 
       def unpersisted_crud_actions
@@ -69,6 +85,7 @@ module Olivander
       included do
         class_attribute :resources, default: {}
         class_attribute :current_resource
+        class_attribute :last_path_helper
       end
 
       class_methods do
@@ -93,30 +110,47 @@ module Olivander
           build_resource_routes(mapper)
         end
 
+        def set_controller_and_helper(a)
+          last_route = Rails.application.routes.routes.last
+          a.controller = last_route.defaults[:controller]
+          a.path_helper = last_route.name.blank? ? last_path_helper : "#{last_route.name}_path"
+          self.last_path_helper = a.path_helper
+        end
+
         def build_resource_routes(mapper)
           resources.keys.each do |k|
             r = resources[k]
-            mapper.resources r.model, only: r.crud_actions.map{ |ca| ca.action } do
+            mapper.resources r.model, only: [] do
+              mapper.collection do
+                r.collection_actions.each do |ba|
+                  next if ba.no_route
+                  next if ba.action == :new
+
+                  if ba.confirm
+                    mapper.get ba.action, action: "confirm_#{ba.action}"
+                    set_controller_and_helper(ba)
+                    mapper.post ba.action
+                  else
+                    mapper.send(ba.verb, ba.action)
+                    set_controller_and_helper(ba)
+                  end
+                end
+              end
+
+              mapper.new do
+                mapper.get :new
+              end if r.collection_actions.select{ |x| x.action == :new }.size.positive?
+
               mapper.member do
                 r.member_actions.each do |ma|
                   next if ma.no_route
                   if ma.confirm
                     mapper.get ma.action, action: "confirm_#{ma.action}"
+                    set_controller_and_helper(ma)
                     mapper.post ma.action
                   else
                     mapper.send(ma.verb, ma.action)
-                  end
-                end
-              end
-
-              mapper.collection do
-                r.collection_actions.each do |ba|
-                  next if ba.no_route
-                  if ba.confirm
-                    mapper.get ba.action, action: "confirm_#{ba.action}"
-                    mapper.post ba.action
-                  else
-                    mapper.send(ma.verb, ba.action)
+                    set_controller_and_helper(ma)
                   end
                 end
               end

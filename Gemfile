@@ -12,6 +12,7 @@ gem "sprockets-rails"
 # gem "debug", ">= 1.0.0"
 
 gem 'chartkick'
+gem 'devise'
 gem 'effective_datatables'
 gem 'haml-rails', '~> 2.0'
 gem 'simple_form'
