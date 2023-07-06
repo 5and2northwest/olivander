@@ -18,7 +18,7 @@ module Olivander
     def self.auto_datatable(klazz, link_path: nil, only: [], except: [], hide: [], show: [])
       Rails.logger.debug "initializing datatable for #{klazz}"
 
-      attributes = klazz.new.attributes.select{ |x| x[0] }
+      attributes = klazz.new.attributes.collect{ |x| x[0] }
       attributes &&= only if only.size.positive?
       attributes -= except if except.size.positive?
 
