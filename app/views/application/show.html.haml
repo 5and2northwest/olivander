@@ -6,3 +6,7 @@
     .col-12
       = render_resource_form(@resource)
 
+- begin
+  = render partial: 'show_additional'
+- rescue ActionView::MissingTemplate
+  - Rails.logger.debug "did not find additional show partial"
