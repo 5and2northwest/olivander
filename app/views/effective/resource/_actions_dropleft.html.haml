@@ -1,4 +1,5 @@
 - route_builder = @context&.route_builder || datatable.class::ROUTE_BUILDER
 = dropdown(variation: :dropleft, btn_class: btn_class) do
   - authorized_resource_actions(route_builder, resource, for_action: action_name).select{ |x| x.show_in_datatable }.each do |a|
-    = dropdown_link_to a.sym, send(a.path_helper, resource.id)
+    - path = a.path_helper.is_a?(Proc) ? a.path_helper.call(resource) : send(a.path_helper, resource.id)
+    = dropdown_link_to a.sym, path

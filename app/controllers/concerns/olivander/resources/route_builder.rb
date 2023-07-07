@@ -6,7 +6,7 @@ module Olivander
                     :no_route, :path_helper
 
       def initialize(sym, action: nil, controller: nil, verb: :get, confirm: false, turbo_frame: nil, collection: false, crud_action: false,
-                     show_in_form: true, show_in_datatable: true, no_route: false)
+                     show_in_form: true, show_in_datatable: true, no_route: false, path_helper: nil)
         self.sym = sym
         self.action = action || sym
         self.controller = controller
@@ -18,6 +18,7 @@ module Olivander
         self.show_in_form = show_in_form
         self.show_in_datatable = show_in_datatable
         self.no_route = no_route
+        self.path_helper = path_helper
       end
     end
 
@@ -96,13 +97,14 @@ module Olivander
           self.current_resource = nil
         end
 
-        def action(sym, verb: :get, confirm: false, turbo_frame: nil, collection: false, show_in_datatable: true, show_in_form: true, no_route: false, controller: nil, action: nil)
+        def action(sym, verb: :get, confirm: false, turbo_frame: nil, collection: false, show_in_datatable: true,
+                   show_in_form: true, no_route: false, controller: nil, action: nil, path_helper: nil)
           raise 'Must be invoked in a resource block' unless current_resource.present?
 
           controller ||= current_resource.model
           current_resource.actions << ResourceAction.new(
             sym, action: action, controller: controller, verb: verb, confirm: confirm, turbo_frame: turbo_frame, collection: collection,
-            show_in_datatable: show_in_datatable, show_in_form: show_in_form, no_route: no_route
+            show_in_datatable: show_in_datatable, show_in_form: show_in_form, no_route: no_route, path_helper: path_helper
           )
         end
 

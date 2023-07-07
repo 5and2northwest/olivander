@@ -18,8 +18,11 @@ module Olivander
     end
 
     def authorized_resource_actions(route_builder, resource, for_action: :show)
-      plural_name = resource.is_a?(Class) ? resource.table_name : resource.class.table_name
+      raw_name = resource.is_a?(Class) ? resource.name : resource.class.name
+      plural_name = raw_name.demodulize.underscore.pluralize
       routed_resource = route_builder.resources[plural_name.to_sym]
+      return [] if routed_resource.nil?
+
       actions = resource.is_a?(Class) ?
         (routed_resource.unpersisted_crud_actions | routed_resource.collection_actions.select{ |x| !x.crud_action }) : 
         (resource.persisted? ? (routed_resource.persisted_crud_actions | routed_resource.member_actions.select{ |x| !x.crud_action }): [])
