@@ -12,6 +12,7 @@
       = render partial: 'layouts/olivander/adminlte/sidebar'
       -# = render partial: 'layouts/olivander/adminlte/content'
       = render partial: @content_partial || 'layouts/olivander/adminlte/content', locals: { content: yield }
+      = turbo_frame_tag 'modal'
       = render partial: 'layouts/olivander/adminlte/flashes'
       = render partial: 'layouts/olivander/adminlte/footer'
       = render partial: 'layouts/olivander/adminlte/control_sidebar'

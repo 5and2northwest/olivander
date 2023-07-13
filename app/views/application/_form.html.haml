@@ -1,6 +1,6 @@
 - read_only = action_name != 'edit'
 = simple_form_for(@resource) do |f|
-  .card
+  .card.card-primary
     .card-header
       .card-tools
         = resource_form_actions(@context.route_builder, @resource, for_action: action_name.to_sym)

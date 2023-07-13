@@ -32,7 +32,7 @@ module Olivander
     def resource_form_actions(route_builder, resource, for_action: :show)
       [].tap do |output|
         authorized_resource_actions(route_builder, resource, for_action: for_action).select{ |x| x.show_in_form }.each do |a|
-          output << link_to(a.sym, {controller: a.controller, action: a.action}, method: a.verb, class: 'btn btn-primary', data: { turbo: true })
+          output << link_to(a.sym, {controller: a.controller, action: a.action}, method: a.verb, class: 'btn btn-tool', data: { turbo: true })
         end
       end.join('&nbsp;').html_safe
     end
