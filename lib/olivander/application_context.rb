@@ -1,6 +1,6 @@
 module Olivander
   class ApplicationContext
-    attr_accessor :name, :logo, :company, :menu_items, :route_builder
+    attr_accessor :name, :logo, :company, :menu_items, :route_builder, :sign_out_path
 
     def self.default
       ctx = ApplicationContext.new
@@ -8,10 +8,11 @@ module Olivander
       ctx
     end
 
-    def initialize(name: 'Application Name', logo: Logo.new, company: Company.new, menu_items: [])
+    def initialize(name: 'Application Name', logo: Logo.new, company: Company.new, sign_out_path: '/sign_out', menu_items: [])
       self.name = name
       self.logo = logo
       self.company = company
+      self.sign_out_path = sign_out_path
       self.menu_items = menu_items
     end
 

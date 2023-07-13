@@ -11,7 +11,7 @@
       .image
         %img.img-circle.elevation-2{:alt => "User Image", :src => image_path(user_image_path(nil))}/
       .info
-        = link_to current_erp_user, destroy_erp_user_session_path, method: :delete, class: 'd-block'
+        = link_to current_user, @context.sign_out_path, method: :delete, class: 'd-block'
     / SidebarSearch Form
     .form-inline
       .input-group{"data-widget" => "sidebar-search"}

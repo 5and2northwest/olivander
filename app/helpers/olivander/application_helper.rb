@@ -36,5 +36,13 @@ module Olivander
         end
       end.join('&nbsp;').html_safe
     end
+
+    def current_user
+      controller.respond_to?(:current_user) ? controller.current_user : nil
+    end
+
+    def current_ability
+      controller.respond_to?(:current_ability) ? controller.current_ability : nil
+    end
   end
 end
