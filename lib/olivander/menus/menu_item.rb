@@ -42,7 +42,6 @@ module Olivander
         @submenu_items ||= [].tap do |arr|
           if visible
             @submenu_items_blocks.each do |block|
-              Rails.logger.debug "invoking submenu item block on #{@key}"
               block.call.each { |item| arr << item if item.visible }
             end
           end
@@ -58,7 +57,6 @@ module Olivander
         @badges ||= [].tap do |arr|
           if visible
             @badges_blocks.each do |block|
-              Rails.logger.debug "invoking badge block on #{@key}"
               block.call.each { |badge| arr << badge }
             end
           end
@@ -69,7 +67,6 @@ module Olivander
 
       def evaluate_conditions_block
         if @conditions_block
-          Rails.logger.debug "invoking condition on #{@key}"
           @conditions_block.call
         else
           true

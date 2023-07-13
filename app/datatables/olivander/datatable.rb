@@ -37,7 +37,7 @@ module Olivander
           if link_path.present? && sym == :id
             link_col sym, link_path, :id, visible: visible
           elsif link_path.present? && sym == :name
-            link_col sym, link_path, %i[id name], visible: visible
+            link_col sym, link_path, :id, visible: visible
           else
             col sym, visible: visible
           end
