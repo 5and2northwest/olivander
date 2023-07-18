@@ -1,0 +1,7 @@
+- actions.each do |a|
+  = link_to controller: a.controller, action: a.action, method: a.verb, class: 'btn btn-tool', data: { turbo: true } do
+    - icon_key = "activerecord.actions.icons.#{a.sym}"
+    - if I18n.exists?(icon_key)
+      %i.fa{ class: I18n.t(icon_key)}
+    = resource_form_action_label(@resource, a.sym)
+  &nbsp;

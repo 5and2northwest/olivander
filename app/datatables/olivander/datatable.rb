@@ -32,6 +32,7 @@ module Olivander
         order(order_by[0], order_by[1]) if order_by.size == 2
         bulk_actions_col
         attributes.each do |key|
+          label = field_label_for(klazz, key)
           sym = key.gsub('_id', '').to_sym
           visible = show.include?(key) || !(default_hidden.include?(key) || hide.include?(key))
           if link_path.present? && sym == :id
@@ -39,7 +40,7 @@ module Olivander
           elsif link_path.present? && sym == :name
             link_col sym, link_path, :id, visible: visible
           else
-            col sym, visible: visible
+            col sym, visible: visible, label: label
           end
         end
         actions_col

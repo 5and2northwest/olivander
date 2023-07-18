@@ -1,12 +1,19 @@
 - resource = (@_effective_resource || Effective::Resource.new(controller_path))
 - @resource = instance_variable_get('@' + resource.name) if resource.name
 
+= render_optional_partial 'show_before'
+
 - if @resource
   .row
     .col-12
-      = render_resource_form(@resource)
+      .card.card-primary
+        .card-header
+          %h3.card-title= @resource.to_s
+          .card-tools
+            = resource_form_actions(@context.route_builder, @resource, for_action: action_name.to_sym)
+        .card-body
+          = render Olivander::Components::ResourceShowComponent.new(@resource, [])
+        .card-footer.text-right
+          = link_to 'Cancel', @_effective_resource.action_path(:index), class: 'btn btn-secondary'
 
-- begin
-  = render partial: 'show_additional'
-- rescue ActionView::MissingTemplate
-  - Rails.logger.debug "did not find additional show partial"
+= render_optional_partial 'show_after'

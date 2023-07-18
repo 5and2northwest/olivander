@@ -26,15 +26,32 @@ module Olivander
       actions = resource.is_a?(Class) ?
         (routed_resource.unpersisted_crud_actions | routed_resource.collection_actions.select{ |x| !x.crud_action }) : 
         (resource.persisted? ? (routed_resource.persisted_crud_actions | routed_resource.member_actions.select{ |x| !x.crud_action }): [])
-      actions.reject{ |a| a.sym == for_action }
+      actions = actions.reject{ |a| a.sym == for_action || !can?(a.sym, resource) }
+      preferred = %i[show edit destroy]
+      [].tap do |arr|
+        preferred.each do |p|
+          actions.each do |a|
+            arr << a if a.sym == p
+          end
+        end
+        arr &&= actions.reject{ |x| preferred.include?(x.sym) }
+      end
     end
 
     def resource_form_actions(route_builder, resource, for_action: :show)
-      [].tap do |output|
-        authorized_resource_actions(route_builder, resource, for_action: for_action).select{ |x| x.show_in_form }.each do |a|
-          output << link_to(a.sym, {controller: a.controller, action: a.action}, method: a.verb, class: 'btn btn-tool', data: { turbo: true })
-        end
-      end.join('&nbsp;').html_safe
+      render partial: 'resource_form_actions', locals: { actions: authorized_resource_actions(route_builder, resource, for_action: for_action).select(&:show_in_form) }
+    end
+
+    def resource_form_action_label(resource, action)
+      return I18n.t("activerecord.actions.#{resource}.#{action}") if I18n.exists?("activerecord.actions.#{resource}.#{action}")
+      return I18n.t("activerecord.actions.#{action}") if I18n.exists?("activerecord.actions.#{action}")
+
+      action.to_s.titleize
+    end
+
+    def resource_field_group_label(resource_class, key)
+      i18n_key = "activerecord.attributes.#{resource_class.name.underscore}.resource_field_groups.#{key}"
+      I18n.exists?(i18n_key) ? I18n.t(i18n_key) : key.to_s.titleize
     end
 
     def current_user
@@ -43,6 +60,29 @@ module Olivander
 
     def current_ability
       controller.respond_to?(:current_ability) ? controller.current_ability : nil
+    end
+
+    def resource_attributes(resource, effective_resource)
+      er_attributes = effective_resource&.model_attributes&.collect{ |x| x[0] }
+      return er_attributes if er_attributes.present? && er_attributes.size.positive?
+
+      resource.auto_form_attributes
+    end
+
+    def render_optional_partial partial
+      begin
+        render partial: partial
+      rescue ActionView::MissingTemplate
+        Rails.logger.debug "did not find partial: #{partial}"
+        nil
+      end
+    end
+
+    def field_label_for(resource_class, sym)
+      i18n_key = "activerecord.attributes.#{resource_class.name.underscore}.#{sym}"
+      return I18n.t(i18n_key) if I18n.exists?(i18n_key)
+
+      sym.to_s.titleize
     end
   end
 end

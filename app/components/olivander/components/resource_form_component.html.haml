@@ -1,0 +1,10 @@
+- @resource.class.resource_field_groups.select{ |x| x.editable }.each do |rfg|
+  %h3= resource_field_group_label(@resource.class, rfg.key) unless rfg.key == :default
+  - rfg.sections.each do |section|
+    .row
+      - section.fields.each do |field|
+        %div{ class: section.column_class }
+          - if field.type == :association
+            = @f.association field.sym, disabled: !field.editable
+          - else 
+            = @f.input field.sym, disabled: !field.editable

@@ -1,0 +1,30 @@
+- @resource.class.resource_field_groups.each do |rfg|
+  %h3= resource_field_group_label(@resource.class, rfg.key) unless rfg.key == :default
+  %table.table.table-hover.table-striped
+    %thead
+      %tr
+        - 12.times do
+          %td{ style: 'width: 8.33%; height: 0px' }
+    %tbody
+      - rfg.sections.each do |section|
+        - section.fields.each_slice(section.columns) do |slice|
+          - colspan = (12 - slice.size) / section.columns
+          %tr
+            - slice.each do |f|
+              %th.text-right{ style: 'width: 10%' }= field_label_for(@resource.class, f.sym)
+              - max_columns = rfg.max_section_columns
+              %td{ colspan: colspan }
+                - val = @resource.send(f.sym)
+                - case f.type
+                - when :string
+                  = val
+                - when :boolean
+                  - icon_class = val ? 'fa-check text-success' : 'fa-times text-danger'
+                  %i.fa{ class: icon_class }
+                - when :association
+                  = link_to val if val.present?
+                - else
+                  = val
+            - (section.columns-slice.size).times do
+              %th
+              %td{ colspan: colspan }
