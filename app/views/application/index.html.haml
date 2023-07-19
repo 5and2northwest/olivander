@@ -1,5 +1,7 @@
 - resource = (@_effective_resource || Effective::Resource.new(controller_path))
 
+= render_optional_partial 'index_before'
+
 - if @datatable
   - content_for :datatable do
     = render_datatable(@datatable, charts: false)
@@ -7,18 +9,19 @@
     - keys = @datatable._charts.keys
     - ks = keys.size
     - if ks.positive?
-      %br
-      .row
-        - @datatable._charts.keys.each do |k|
+      %br.foo
+      .row{ data: { controller: 'datatable-index-charts' }}
+        - keys.each do |k|
+          - chart = @datatable._charts[k]
           %div{ class: "#{col_class_num('xl', ks, 3)} #{col_class_num('lg', ks, 2)} #{col_class_num('md', ks, 6)} #{col_class_num('sm', ks, 6)}"}
-            .card.card-primary
+            .card.card-primary{ data: { controller: 'datatable-expandable-chart' } }
               .card-header
                 %h3.card-title= I18n.t([@datatable.class.name.underscore, 'charts', k].join('.'))
                 .card-tools.text-right
                   %button.btn.btn-tool{ type: :button, 'data-card-widget': :maximize }
                     %i.fas.fa-expand
-              .card-body{ style: 'min-height: 220px' }
-                = render_datatable_chart(@datatable, k)
+              .card-body{ style: 'height: 220px' }
+                = send(chart[:as].underscore, @datatable.to_json[:charts][k][:data], id: chart[:name], height: '90%', adapter: 'google')
 
   = content_for :datatable_charts
 
@@ -45,7 +48,4 @@
           %p or include Effective::CrudController in your controller
       -# .card-footer
 
-- begin
-  = render partial: 'index_additional'
-- rescue ActionView::MissingTemplate
-  - Rails.logger.debug "did not find additional index partial"
+= render_optional_partial 'index_after'

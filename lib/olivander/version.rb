@@ -1,3 +1,3 @@
 module Olivander
-  VERSION = "0.1.2.21"
+  VERSION = "0.1.2.22"
 end
