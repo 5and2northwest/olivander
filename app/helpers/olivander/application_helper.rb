@@ -26,7 +26,7 @@ module Olivander
       actions = resource.is_a?(Class) ?
         (routed_resource.unpersisted_crud_actions | routed_resource.collection_actions.select{ |x| !x.crud_action }) : 
         (resource.persisted? ? (routed_resource.persisted_crud_actions | routed_resource.member_actions.select{ |x| !x.crud_action }): [])
-      actions = actions.reject{ |a| a.sym == for_action || EffectiveDatatables.authorization_method.call(controller, resource, a.sym) }
+      actions = actions.reject{ |a| a.sym == for_action || !EffectiveDatatables.authorization_method.call(controller, a.sym, resource) }
       preferred = %i[show edit destroy]
       [].tap do |arr|
         preferred.each do |p|

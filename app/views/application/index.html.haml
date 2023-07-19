@@ -11,13 +11,13 @@
       .row
         - @datatable._charts.keys.each do |k|
           %div{ class: "#{col_class_num('xl', ks, 3)} #{col_class_num('lg', ks, 2)} #{col_class_num('md', ks, 6)} #{col_class_num('sm', ks, 6)}"}
-            .card.card-secondary
+            .card.card-primary
               .card-header
                 %h3.card-title= I18n.t([@datatable.class.name.underscore, 'charts', k].join('.'))
                 .card-tools.text-right
                   %button.btn.btn-tool{ type: :button, 'data-card-widget': :maximize }
                     %i.fas.fa-expand
-              .card-body
+              .card-body{ style: 'min-height: 220px' }
                 = render_datatable_chart(@datatable, k)
 
   = content_for :datatable_charts
