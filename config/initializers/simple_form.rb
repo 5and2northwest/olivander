@@ -13,7 +13,7 @@ SimpleForm.setup do |config|
   # wrapper, change the order or even add your own to the
   # stack. The options given below are used to wrap the
   # whole input.
-  config.wrappers :default, class: :input,
+  config.wrappers :default, class: "form-group",
     hint_class: :field_with_hint, error_class: :field_with_errors, valid_class: :field_without_errors do |b|
     ## Extensions enabled by default
     # Any of these extensions can be disabled for a
@@ -52,16 +52,49 @@ SimpleForm.setup do |config|
     b.optional :readonly
 
     ## Inputs
-    # b.use :input, class: 'input', error_class: 'is-invalid', valid_class: 'is-valid'
-    b.use :label_input
+    # b.use :input, class: 'form-control', error_class: 'is-invalid', valid_class: 'is-valid'
+    b.use :label #, class: 'form-control'
+    b.use :input, class: 'form-control'
     b.use :hint,  wrap_with: { tag: :span, class: :hint }
-    b.use :error, wrap_with: { tag: :span, class: :error }
+    b.use :error, wrap_with: { tag: :span, class: "text-danger" }
 
     ## full_messages_for
     # If you want to display the full error message for the attribute, you can
     # use the component :full_error, like:
     #
     # b.use :full_error, wrap_with: { tag: :span, class: :error }
+
+    # b.wrapper
+  end
+
+  config.wrappers :checkbox, class: "form-check",
+    hint_class: :field_with_hint, error_class: :field_with_errors, valid_class: :field_without_errors do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :minlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+    b.use :input, class: 'form-check-input'
+    b.use :label #, class: 'form-control'
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :error, wrap_with: { tag: :span, class: "text-danger" }
+  end
+
+  config.wrappers :switch, class: "custom-control custom-switch",
+    hint_class: :field_with_hint, error_class: :field_with_errors, valid_class: :field_without_errors do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :minlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+    b.use :input, class: 'custom-control-input'
+    #b.use :label, class: 'custom-control-label'
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :error, wrap_with: { tag: :span, class: "text-danger" }
   end
 
   # The default wrapper to be used by the FormBuilder.
@@ -71,7 +104,7 @@ SimpleForm.setup do |config|
   # Defaults to :nested for bootstrap config.
   #   inline: input + label
   #   nested: label > input
-  config.boolean_style = :nested
+  config.boolean_style = :inline
 
   # Default class for buttons
   config.button_class = 'btn'

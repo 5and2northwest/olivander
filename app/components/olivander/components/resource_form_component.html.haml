@@ -4,7 +4,8 @@
     .row
       - section.fields.each do |field|
         %div{ class: section.column_class }
-          - if field.type == :association
-            = @f.association field.sym, disabled: !field.editable
+          - case field.type
+          - when :association
+            = @f.association field.sym, disabled: !field.editable, input_html: { data: { controller: "input-control-#{field.type}" } }
           - else 
-            = @f.input field.sym, disabled: !field.editable
+            = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: { controller: "input-control-#{field.type}" } }

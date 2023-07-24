@@ -18,6 +18,8 @@
               .card-header
                 %h3.card-title= I18n.t([@datatable.class.name.underscore, 'charts', k].join('.'))
                 .card-tools.text-right
+                  %button.btn.btn-tool{ type: :button, 'data-card-widget': :collapse }
+                    %i.fas.fa-minus
                   %button.btn.btn-tool{ type: :button, 'data-card-widget': :maximize }
                     %i.fas.fa-expand
               .card-body{ style: 'height: 220px' }
