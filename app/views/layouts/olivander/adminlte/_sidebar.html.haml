@@ -1,9 +1,9 @@
 / Main Sidebar Container
 %aside.main-sidebar.sidebar-dark-primary.elevation-4{ data: { controller: 'left-nav' }}
   / Brand Logo
-  %a.brand-link.bg-info{:href => "/"}
+  %a.brand-link{ href: "/", class: sidebar_background_class }
     %img.brand-image.img-circle.elevation-3{:alt => @context.logo.alt, :src => @context.logo.url, :style => "opacity: .8"}/
-    %span.brand-text.font-weight-light= @context.name
+    %span.brand-text.font-weight-light= sidebar_context_name
   / Sidebar
   .sidebar
     / Sidebar user panel (optional)

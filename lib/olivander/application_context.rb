@@ -1,6 +1,6 @@
 module Olivander
   class ApplicationContext
-    attr_accessor :name, :logo, :company, :menu_items, :route_builder, :sign_out_path
+    attr_accessor :name, :logo, :company, :menu_items, :route_builder, :sign_out_path, :sidebar_background_class
 
     def self.default
       ctx = ApplicationContext.new

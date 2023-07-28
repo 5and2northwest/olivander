@@ -84,5 +84,34 @@ module Olivander
 
       sym.to_s.titleize
     end
+
+    def is_dev_environment?
+      sidebar_context_suffix != 'production'
+    end
+
+    def sidebar_context_name
+      [@context.name, sidebar_context_suffix&.upcase].reject(&:blank?).join(' ')
+    end
+
+    def sidebar_context_suffix
+      suffix = nil
+      suffix ||= ENV['CLIENT_ENVIRONMENT']
+      parts = request.host.split('.')
+      suffix ||= parts.first.split('-').last.downcase if request.host.include?('-')
+      suffix ||= 'local' if %w[localhost test].include?(parts.last.downcase)
+      suffix ||= 'production'
+      suffix
+    end
+
+    def sidebar_background_class
+      @context.sidebar_background_class ||
+        ENV['SIDEBAR_BACKGROUND_CLASS'] ||
+        (is_dev_environment? ? 'bg-danger' : 'bg-info')
+    end
+
+    def favicon_link
+      favicon_path = is_dev_environment? ? '/images/favicon-dev.png' : '/images/favicon.ico'
+      favicon_link_tag(image_path(favicon_path))
+    end
   end
 end
