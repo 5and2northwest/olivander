@@ -3,25 +3,16 @@
   = render partial: 'layouts/olivander/adminlte/head'
   %body.hold-transition.login-page
     .login-box
-      / /.login-logo
-      .card.card-outline.card-primary
-        .card-header.text-center
-          %a.h1{:href => root_path}
-            %b= ENV.fetch('APPLICATION_NAME', '<Application Name>')
+      -# .login-logo
+      -#   %img.brand-image.img-circle.elevation-3{:alt => @context.logo.alt, :src => @context.logo.url, :style => "opacity: .8"}
+      .card
+        .card-header.text-center{ class: sidebar_background_class }
+          %a.h1{ href: '/' }
+            %b= sidebar_context_name
         .card-body
           %p.login-box-msg Sign in to start your session
           = render partial: 'layouts/olivander/adminlte/login_flashes'
           = yield
         .card-footer
           %p.small
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
-            some form of notice here
+            

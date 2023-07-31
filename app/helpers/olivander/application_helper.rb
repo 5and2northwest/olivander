@@ -79,7 +79,8 @@ module Olivander
     end
 
     def field_label_for(resource_class, sym)
-      i18n_key = "activerecord.attributes.#{resource_class.name.underscore}.#{sym}"
+      sym_s = sym.to_s.gsub('.', '_')
+      i18n_key = "activerecord.attributes.#{resource_class.name.underscore}.#{sym_s}"
       return I18n.t(i18n_key) if I18n.exists?(i18n_key)
 
       sym.to_s.titleize
@@ -109,9 +110,41 @@ module Olivander
         (is_dev_environment? ? 'bg-danger' : 'bg-info')
     end
 
+    def header_page_title
+      [is_dev_environment? ? sidebar_context_suffix.upcase : nil, page_title].reject(&:blank?).join(' ')
+    end
+
     def favicon_link
       favicon_path = is_dev_environment? ? '/images/favicon-dev.png' : '/images/favicon.ico'
       favicon_link_tag(image_path(favicon_path))
+    end
+
+    def flash_class key
+      case key
+      when "error"
+        "danger"
+      when "notice"
+        "info"
+      when "alert"
+        "danger"
+      else
+        key
+      end
+    end
+
+    def flash_icon key
+      case key
+      when "error"
+        "fas fa-exclamation-circle"
+      when "notice"
+        "fas fa-info-circle"
+      when "alert"
+        "fas fa-info-circle"
+      when "success"
+        "fas fa-check-circle"
+      else
+        "fas fa-question-circle"
+      end
     end
   end
 end
