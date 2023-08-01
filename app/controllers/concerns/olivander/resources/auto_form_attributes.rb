@@ -33,16 +33,16 @@ module Olivander
           self.resource_field_group_collection
         end
 
-        def self.auto_resource_fields(columns: 2, only: [])
+        def self.auto_resource_fields(columns: 2, only: [], editable: true)
           return unless ActiveRecord::Base.connection.table_exists?(table_name)
 
           if current_resource_field_group.nil?
             resource_field_group do
-              auto_resource_fields(columns: columns, only: only)
+              auto_resource_fields(columns: columns, only: only, editable: editable)
             end
           elsif current_resource_field_group.forced_section.nil?
             resource_field_section(columns) do
-              auto_resource_fields(columns: columns, only: only)
+              auto_resource_fields(columns: columns, only: only, editable: editable)
             end
           else
             if only.size.zero?
@@ -59,21 +59,19 @@ module Olivander
                 type = att.type
                 next unless inc == sym
 
-                resource_field sym, type
+                resource_field sym, type, editable: editable
               end
 
               reflections.map{ |x| x[1] }
                          .filter{ |x| x.foreign_key == inc || x.name == inc }
                          .each do |r|
-                sym = r.name
-                type = :association
-                resource_field sym, type
+                resource_field r.name, :association, editable: editable
               end
 
               next unless respond_to?(:attachment_definitions)
 
               attachment_definitions.filter{ |x| x == inc }.each do |ad|
-                resource_field ad[0], :file
+                resource_field ad[0], :file, editable: editable
               end
             end
           end
