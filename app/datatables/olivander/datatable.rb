@@ -40,11 +40,11 @@ module Olivander
         bulk_actions_col
         column_attributes.each do |key|
           label = field_label_for(klazz, key)
-          sym = key.gsub('_id', '')  #.to_sym
+          sym = key.gsub('_id', '')
           visible = show.include?(key) || !(default_hidden.include?(key) || hide.include?(key))
           if link_path.present? && sym == :id
-            link_col sym, link_path, :id, visible: visible
-          elsif link_path.present? && sym == :name
+            link_col sym, link_path, 'id', visible: visible
+          elsif link_path.present? && sym == 'name'
             link_col sym, link_path, :id, visible: visible
           elsif sym.include?('.')
             col sym, visible: visible, label: label
