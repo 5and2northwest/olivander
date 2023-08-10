@@ -3,7 +3,7 @@
 module Olivander
   module Components
     class PortletComponent < ViewComponent::Base
-      def initialize(title, background: nil, header_background: 'bg-info', turbo_frame: nil, src: nil, loading: nil)
+      def initialize(title, background: nil, header_background: 'bg-secondary', turbo_frame: nil, src: nil, loading: nil)
         super
         @title = title
         @background = background

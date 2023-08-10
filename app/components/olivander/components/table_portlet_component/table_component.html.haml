@@ -1,0 +1,18 @@
+- if @item_iteration.first?
+  %table.table.table-striped.table-hover.table-fixed_header/
+  - if @headers
+    %thead
+      %tr
+        - @builder.field_blocks.each do |field_block|
+          %th{ class: field_block.alignment }
+            - if field_block.key.present?
+              = I18n.t(['activerecord.attributes', @item.class.name.underscore, field_block.key].join('.'))
+  %tbody/
+%tr
+  - @builder.field_blocks.each do |field_block|
+    %td{ class: field_block.alignment }
+      = capture do
+        - instance_exec(@item, &field_block.block)
+- if @item_iteration.last?
+  </tbody>
+  </table>

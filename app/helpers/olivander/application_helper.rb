@@ -91,7 +91,7 @@ module Olivander
     end
 
     def sidebar_context_name
-      [@context.name, sidebar_context_suffix&.upcase].reject(&:blank?).join(' ')
+      [@context.name, sidebar_context_suffix&.upcase].reject{ |x| x.blank? or x == 'PRODUCTION' }.join(' ')
     end
 
     def sidebar_context_suffix
@@ -145,6 +145,24 @@ module Olivander
       else
         "fas fa-question-circle"
       end
+    end
+
+    def collection_component_builder_for(klass, collection, *args, &block)
+      builder = klass::Builder.new(self, &block)
+      options = args.extract_options!
+      options[:builder] = builder
+      render klass.new(collection, *(args + [options])) do |component|
+        if builder.header_tools.present?
+          component.with_header_tools do
+            builder.header_tools.call
+          end
+        end
+        if builder.footer_buttons.present?
+          component.with_footer_buttons do
+            builder.footer_buttons.call
+          end
+        end
+      end 
     end
   end
 end

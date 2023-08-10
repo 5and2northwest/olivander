@@ -26,3 +26,9 @@
  .table td, .table th {
   padding: 0.25rem !important;
  }
+ .table-fixed_header thead tr {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+}
