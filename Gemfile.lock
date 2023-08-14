@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    five-two-nw-olivander (0.1.2.31)
+    five-two-nw-olivander (0.1.2.32)
       chartkick
       devise
       effective_datatables

@@ -44,19 +44,21 @@ module Olivander
             end
           else
             only = self.columns.collect{ |x| x.name.to_sym } - SKIPPED_ATTRIBUTES if only.size.zero?
-            self.columns.each do |att|
-              sym = att.name.to_sym
-              type = att.type
-              next unless only.include?(sym)
+            only.each do |inc|
+              self.columns.each do |att|
+                sym = att.name.to_sym
+                type = att.type
+                next unless inc == sym
 
-              reflections.map{ |x| x[1] }
-                          .filter{ |x| x.foreign_key == att.name }
-                          .each do |r|
-                sym = r.name
-                type = :association
+                reflections.map{ |x| x[1] }
+                            .filter{ |x| x.foreign_key == att.name }
+                            .each do |r|
+                  sym = r.name
+                  type = :association
+                end
+
+                resource_field sym, type
               end
-
-              resource_field sym, type
             end
           end
         end

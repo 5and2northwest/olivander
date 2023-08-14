@@ -22,6 +22,8 @@ module Olivander
       column_attributes = klazz_attributes
       column_attributes &&= only if only.size.positive?
       column_attributes -= except if except.size.positive?
+      resources_sym = klazz.table_name.to_sym
+      bulk_action_list = self::ROUTE_BUILDER.resources[resources_sym].datatable_bulk_actions
 
       default_hidden = %w[id created updated created_at updated_at deleted_at current_user current_action]
 
@@ -35,9 +37,23 @@ module Olivander
         dc
       end
 
+      if bulk_action_list.size.positive?
+        bulk_actions do
+          bulk_action_list.each do |ma|
+            if ma.confirm
+              bulk_action ma.sym, url_for(controller: ma.controller, action: "confirm_#{ma.action}")
+            else
+              bulk_action ma.sym, url_for(controller: ma.controller, action: ma.action), data: { turbo_frame: ma.turbo_frame }
+            end
+          end
+        end
+      end
+
       datatable do
         order(order_by[0], order_by[1]) if order_by.size == 2
-        bulk_actions_col
+        Rails.logger.debug "bulk actions size: #{datatable._bulk_actions.size}"
+        Rails.logger.debug "bulk actions size: #{datatable._bulk_actions.size.positive?}"
+        # bulk_actions_col if datatable._bulk_actions.size.positive?
         column_attributes.each do |key|
           label = field_label_for(klazz, key)
           sym = key.gsub('_id', '')
