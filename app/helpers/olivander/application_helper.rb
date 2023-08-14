@@ -34,7 +34,9 @@ module Olivander
             arr << a if a.sym == p
           end
         end
-        arr &&= actions.reject{ |x| preferred.include?(x.sym) }
+        actions.reject{ |x| preferred.include?(x.sym) }.each do |a|
+          arr << a
+        end
       end
     end
 
