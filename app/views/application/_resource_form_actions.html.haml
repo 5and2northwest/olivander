@@ -1,7 +1,15 @@
-- actions.each do |a|
-  = link_to({ controller: a.controller, action: a.action }, method: a.verb, class: 'btn btn-tool', data: { turbo: true }) do
+- actions.each_with_index do |a, idx|
+  - cf_sym = "link_inner#{idx}".to_sym
+  = content_for cf_sym do
     - icon_key = "activerecord.actions.icons.#{a.sym}"
     - if I18n.exists?(icon_key)
       %i.fa{ class: I18n.t(icon_key)}
     = resource_form_action_label(@resource, a.sym)
+
+  - if a.turbo_frame.blank?
+    = link_to({ controller: a.controller, action: a.action }, method: a.verb, class: 'btn btn-tool') do
+      = yield cf_sym
+  - else
+    = link_to({ controller: a.controller, action: a.action }, class: 'btn btn-tool', data: { turbo: true, turbo_method: a.verb, turbo_frame: a.turbo_frame }) do
+      = yield cf_sym
   &nbsp;
