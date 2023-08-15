@@ -2,4 +2,5 @@
 = dropdown(variation: :dropleft, btn_class: btn_class) do
   - authorized_resource_actions(route_builder, resource, for_action: action_name).select{ |x| x.show_in_datatable }.each do |a|
     - path = a.path_helper.is_a?(Proc) ? a.path_helper.call(resource) : send(a.path_helper, resource.id)
-    = dropdown_link_to resource_form_action_label(resource, a.sym), path
+    - data = a.turbo_frame.present? ? { turbo: true, turbo_frame: a.turbo_frame } : {}
+    = dropdown_link_to resource_form_action_label(resource, a.sym), path, data: data

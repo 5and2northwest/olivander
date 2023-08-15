@@ -23,10 +23,11 @@ module Olivander
     end
 
     class RoutedResource
-      attr_accessor :model, :actions
+      attr_accessor :model, :namespaces, :actions
 
-      def initialize(model, crud_actions)
+      def initialize(model, namespaces, crud_actions)
         self.model = model
+        self.namespaces = namespaces
         self.actions = []
         %i[index new create edit show update destroy].each do |ca|
           next unless crud_actions.include?(ca)
@@ -90,8 +91,8 @@ module Olivander
       end
 
       class_methods do
-        def resource(model, only: DEFAULT_CRUD_ACTIONS, except: [], &block)
-          self.current_resource = RoutedResource.new(model, DEFAULT_CRUD_ACTIONS & (only - except))
+        def resource(model, only: DEFAULT_CRUD_ACTIONS, except: [], namespaces: [], &block)
+          self.current_resource = RoutedResource.new(model, namespaces, DEFAULT_CRUD_ACTIONS & (only - except))
           yield if block_given?
           resources[model] = current_resource
           self.current_resource = nil
@@ -109,7 +110,7 @@ module Olivander
         end
 
         def build_routes(mapper)
-          build_resource_routes(mapper)
+          build_resources_routes(mapper)
         end
 
         def set_controller_and_helper(a)
@@ -119,9 +120,19 @@ module Olivander
           self.last_path_helper = a.path_helper
         end
 
-        def build_resource_routes(mapper)
+        def build_resources_routes(mapper)
           resources.keys.each do |k|
             r = resources[k]
+            build_resource_route(mapper, r, r.namespaces)
+          end
+        end
+
+        def build_resource_route(mapper, r, namespaces)
+          if namespaces.size.positive?
+            mapper.namespace namespaces.first do
+              build_resource_route(mapper, r, r.namespaces.last(r.namespaces.size - 1))
+            end
+          else
             mapper.resources r.model, only: [] do
               mapper.collection do
                 r.collection_actions.each do |ba|

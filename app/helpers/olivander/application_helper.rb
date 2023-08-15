@@ -45,7 +45,8 @@ module Olivander
     end
 
     def resource_form_action_label(resource, action)
-      return I18n.t("activerecord.actions.#{resource}.#{action}") if I18n.exists?("activerecord.actions.#{resource}.#{action}")
+      key = resource.class.name.underscore
+      return I18n.t("activerecord.actions.#{key}.#{action}") if I18n.exists?("activerecord.actions.#{key}.#{action}")
       return I18n.t("activerecord.actions.#{action}") if I18n.exists?("activerecord.actions.#{action}")
 
       action.to_s.titleize
