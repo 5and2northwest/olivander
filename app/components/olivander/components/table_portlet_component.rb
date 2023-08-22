@@ -21,6 +21,7 @@ module Olivander
       class TableComponent < ViewComponent::Base
         with_collection_parameter :item
         delegate :can?, :cannot?, to: :helpers
+        delegate :user_image_path, to: :helpers
 
         def initialize(item:, item_iteration:, builder:, headers:)
           super

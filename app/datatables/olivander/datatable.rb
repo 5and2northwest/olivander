@@ -15,7 +15,7 @@ module Olivander
       end
     end
 
-    def self.auto_datatable(klazz, collection: nil, link_path: nil, only: [], except: [], hide: [], show: [], order_by: [])
+    def self.auto_datatable(klazz, collection: nil, link_path: nil, only: [], except: [], hide: [], show: [], order_by: [], scopes: [])
       Rails.logger.debug "initializing datatable for #{klazz}"
 
       klazz_attributes = klazz.new.attributes.collect{ |x| x[0] }
@@ -26,6 +26,12 @@ module Olivander
       bulk_action_list = self::ROUTE_BUILDER.resources[resources_sym]&.datatable_bulk_actions || []
 
       default_hidden = %w[id created updated created_at updated_at deleted_at current_user current_action]
+
+      filters do
+        scopes.each do |s|
+          scope s
+        end
+      end
 
       collection do
         dc = collection.nil? ? klazz.all : collection
