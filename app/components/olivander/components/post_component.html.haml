@@ -1,0 +1,25 @@
+.post{ id: @id }
+  - note = @note
+  .user-block
+    %img.img-circle.img-bordered-sm{ alt: "Avatar", src: image_path(user_image_path(@avatar_url)), title: @poster }
+    - if tools?
+      .float-right
+        = tools
+        &nbsp;
+    %span.username
+      - if @poster.is_a?(String)
+        = @poster
+      - else
+        = link_to @poster, @poster
+    %span.description
+      %i.fas.fa-clock
+      posted #{@posted.to_fs}
+      - if @updated.present? && @updated != @posted
+        , updated #{time_ago_in_words(@updated)} ago
+  %p
+    - if content?
+      = content
+    - elsif @text
+      = simple_format(@text)
+    - else 
+      %i No text entered
