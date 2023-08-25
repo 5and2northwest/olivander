@@ -4,6 +4,9 @@
 .card{ class: @background }
   .card-header{ class: @header_background }
     %h3.card-title= @title
+    - if header_tools?
+      .card-tools
+        = header_tools
   .card-body
     = content
   -# .card-footer

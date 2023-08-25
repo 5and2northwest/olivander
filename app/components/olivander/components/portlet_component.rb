@@ -3,6 +3,9 @@
 module Olivander
   module Components
     class PortletComponent < ViewComponent::Base
+      
+      renders_one :header_tools
+
       def initialize(title, background: nil, header_background: 'bg-secondary', turbo_frame: nil, src: nil, loading: nil)
         super
         @title = title
