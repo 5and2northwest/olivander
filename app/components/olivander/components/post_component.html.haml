@@ -7,10 +7,13 @@
         = tools
         &nbsp;
     %span.username
-      - if @poster.is_a?(String)
-        = @poster
+      - if @poster.present?
+        - if @poster.is_a?(String)
+          = @poster
+        - else
+          = link_to @poster, @poster
       - else
-        = link_to @poster, @poster
+        Unknown
     %span.description
       %i.fas.fa-clock
       posted #{@posted.to_fs}
@@ -18,8 +21,11 @@
         , updated #{time_ago_in_words(@updated)} ago
   %p
     - if content?
-      = content
-    - elsif @text
+      - if content.blank?
+        %i No text entered
+      - else
+        = content
+    - elsif !@text.blank?
       = simple_format(@text)
     - else 
       %i No text entered

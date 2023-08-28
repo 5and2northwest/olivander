@@ -12,5 +12,6 @@
 //= require "adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"
 //= require "adminlte/plugins/summernote/summernote-bs4.min.js"
 //= require "adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"
+//= require "adminlte/plugins/sweetalert2/sweetalert2.all.min.js"
 //= require "adminlte/dist/js/adminlte.js"
 //= require "effective_datatables"
