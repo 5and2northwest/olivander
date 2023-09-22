@@ -71,7 +71,7 @@ module Olivander
           elsif sym.include?('.')
             col sym, visible: visible, label: label
           else
-            col sym, visible: visible, label: label
+            col sym, visible: visible, label: label, action: :show
           end
         end
         actions_col

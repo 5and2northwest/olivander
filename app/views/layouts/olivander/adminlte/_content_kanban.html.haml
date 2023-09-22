@@ -6,7 +6,7 @@
           %h1 Kanban Board
         .col-sm-6.text-right
           %a{ class: "nav-link", 'data-controlsidebar-slide': "true", 'data-widget': "control-sidebar", href: "#", role: "button", title: "Show Sidebar Options" }
-            Set Board Options
+            = content_for(:board_options_label) || 'Set Board Options'
 
   %section.content.pb-3
     .container-fluid.h-100#kanban-container
