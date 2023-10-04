@@ -1,7 +1,7 @@
 - if @turbo_frame.present?
   <turbo-frame id="#{@turbo_frame}">
 
-.card{ class: @background }
+.card{ class: @card_type }
   .card-header{ class: @header_background }
     %h3.card-title= @title
     .card-tools
@@ -11,7 +11,7 @@
       -#   %i.fas.fa-minus
       -# %button.btn.btn-tool{ type: :button, 'data-card-widget': :maximize }
       -#   %i.fas.fa-expand
-  .card-body
+  .card-body{ class: @background }
     - if @collection&.size&.positive?
       %div{style: @max_height.present? ? "max-height: #{@max_height}; overflow-y: auto; overflow-x: hidden" : ""}
         = render Olivander::Components::TablePortletComponent::TableComponent.with_collection(@collection, builder: @builder, headers: @headers)

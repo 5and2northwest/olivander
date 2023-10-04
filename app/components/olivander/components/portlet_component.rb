@@ -3,17 +3,19 @@
 module Olivander
   module Components
     class PortletComponent < ViewComponent::Base
-      
+
       renders_one :header_tools
 
-      def initialize(title, background: nil, header_background: 'bg-secondary', turbo_frame: nil, src: nil, loading: nil)
+      def initialize(title, *args)
         super
         @title = title
-        @background = background
-        @header_background = header_background
-        @turbo_frame = turbo_frame
-        @src = src
-        @loading = loading
+        options = args.extract_options!
+        @card_type = options[:card_type] || 'card-default'
+        @background = options[:background]
+        @header_background = options[:header_background]
+        @turbo_frame = options[:turbo_frame]
+        @src = options[:src]
+        @loading = options[:loading]
       end
     end
   end

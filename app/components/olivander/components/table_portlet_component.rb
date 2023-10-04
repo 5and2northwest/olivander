@@ -6,16 +6,19 @@ module Olivander
       renders_one :header_tools
       renders_one :footer_buttons
 
-      def initialize(collection, headers: true, builder:, title: '', background: nil, header_background: 'bg-secondary', turbo_frame: nil, max_height: nil)
+      def initialize(collection, *args)
         super
+        options = args.extract_options!
         @collection = collection
-        @builder = builder
-        @title = title
-        @background = background
-        @header_background = header_background
-        @turbo_frame = turbo_frame
-        @max_height = max_height
-        @headers = headers
+        @builder = options[:builder]
+        @title = options[:title] || ''
+        @card_type = options[:card_type] || 'card-default'
+        @background = options[:background]
+        @header_background = options[:header_background]
+        @turbo_frame = options[:turbo_frame]
+        @max_height = options[:max_height]
+        @headers = options[:headers].nil? ? true : options[:headers]
+        @id = options[:id]
       end
 
       class TableComponent < ViewComponent::Base

@@ -18,6 +18,8 @@
  *= require 'adminlte/plugins/daterangepicker/daterangepicker'
  *= require 'adminlte/plugins/summernote/summernote-bs4.min'
  *= require 'adminlte/plugins/sweetalert2/sweetalert2.min.css'
+ *= require 'adminlte/plugins/select2/css/select2.min.css'
+ *= require 'adminlte/plugins/select2/css/select2-bootstrap4.min.css'
  *= require 'adminlte/plugins/fontawesome-free/css/all.min'
  *= require effective_datatables
  *= require_tree .

@@ -13,5 +13,7 @@
 //= require "adminlte/plugins/summernote/summernote-bs4.min.js"
 //= require "adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"
 //= require "adminlte/plugins/sweetalert2/sweetalert2.all.min.js"
+//= require "adminlte/plugins/select2/js/select2.full.min.js"
+//= require "adminlte/select2_defaults"
 //= require "adminlte/dist/js/adminlte.js"
 //= require "effective_datatables"
