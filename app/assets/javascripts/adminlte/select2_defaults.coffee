@@ -14,6 +14,10 @@ $.fn.select2.defaults.set('dropdownParent', $('#modal-root'))
 $(document).on 'select2:open', () =>
   document.querySelector('.select2-search__field').focus()
 
-initSelect2s = () -> $('select').not('.no-select2').select2()
+initSelect2s = () -> $('select').not('.no-select2').each (k,v) =>
+  $(v).select2({ dropdownParent: $(v).parent() })
 
 $(document).ready -> initSelect2s()
+$(document).on 'show.bs.modal', (e) =>
+  $('select').not('.no-select2').each (k,v) =>
+    $(v).select2({ dropdownParent: $(v).parent() })

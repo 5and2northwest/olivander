@@ -39,3 +39,15 @@
     asset-url("fa-solid-900.ttf") format("truetype"),
     asset-url("fa-solid-900.svg#fontawesome") format("svg");
   }
+
+  @font-face {
+    font-display: auto;
+    font-family: summernote;
+    font-style: normal;
+    font-weight: 400;
+    src:
+      asset-url("summernote.eot?#iefix") format("embedded-opentype"),
+      asset-url("summernote.woff2") format("woff2"),
+      asset-url("summernote.woff") format("woff"),
+      asset-url("summernote.ttf") format("truetype");
+  }
