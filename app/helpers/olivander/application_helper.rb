@@ -14,7 +14,9 @@ module Olivander
     end
 
     def user_image_path(user)
-      "avatar#{SecureRandom.random_number(4)}.png"
+      return "avatar#{SecureRandom.random_number(4)}.png" unless user.present? && user.respond_to?(:avatar_path)
+
+      user.avatar_path
     end
 
     def authorized_resource_actions(route_builder, resource, for_action: :show)

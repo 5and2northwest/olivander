@@ -3,5 +3,5 @@
 
 - if @resource
   .row
-    .col-12
+    .col-12{ data: { controller: [controller.class.name.gsub('Controller', '').underscore.dasherize.gsub('/', '--'), action_name].join('-') } }
       = render_resource_form(@resource)

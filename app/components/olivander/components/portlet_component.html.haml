@@ -1,7 +1,7 @@
 - if @turbo_frame.present?
-  <turbo-frame id="#{@turbo_frame}" src="#{@src}" loading="#{@loading}">
+  %turbo-frame{ id: @turbo_frame, src: @src, loading: @loading, data: @turbo_frame_data }/
 
-.card{ class: @card_type }
+.card{ class: @card_type, data: @card_data }
   .card-header{ class: @header_background }
     %h3.card-title= @title
     - if header_tools?

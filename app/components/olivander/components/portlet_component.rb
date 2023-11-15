@@ -16,6 +16,8 @@ module Olivander
         @turbo_frame = options[:turbo_frame]
         @src = options[:src]
         @loading = options[:loading]
+        @card_data = options[:card_data]
+        @turbo_frame_data = options[:turbo_frame_data]
       end
     end
   end

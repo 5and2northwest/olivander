@@ -19,6 +19,8 @@ module Olivander
         @max_height = options[:max_height]
         @headers = options[:headers].nil? ? true : options[:headers]
         @id = options[:id]
+        @card_data = options[:card_data]
+        @turbo_frame_data = options[:turbo_frame_data]
       end
 
       class TableComponent < ViewComponent::Base
