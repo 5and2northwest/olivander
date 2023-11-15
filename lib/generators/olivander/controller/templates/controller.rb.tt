@@ -1,0 +1,8 @@
+<% module_namespacing do -%>
+# frozen_string_literal: true
+
+# CrudController class for <%= human_name.singularize %> model
+class <%= class_name %>Controller < ApplicationController
+  include Effective::CrudController
+end
+<% end -%>

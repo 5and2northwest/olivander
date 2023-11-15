@@ -17,8 +17,8 @@ module Olivander
     end
 
     def create_views
-      template "views/_form.html.haml", File.join("app/views", controller_file_path, '_form.html.haml')
-      template "views/_model.html.haml", File.join("app/views", controller_file_path, "_#{file_name}.html.haml")
+      # template "views/_form.html.haml", File.join("app/views", controller_file_path, '_form.html.haml')
+      # template "views/_model.html.haml", File.join("app/views", controller_file_path, "_#{file_name}.html.haml")
     end
 
     hook_for :resource_route, in: :rails
