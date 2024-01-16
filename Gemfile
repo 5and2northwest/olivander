@@ -15,6 +15,7 @@ gem 'chartkick'
 gem 'devise'
 gem 'effective_datatables'
 gem 'haml-rails', '~> 2.0'
+gem 'net-http'
 gem 'simple_form'
 gem 'view_component'
 
