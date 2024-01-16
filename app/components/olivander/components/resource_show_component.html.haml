@@ -22,7 +22,13 @@
                   - icon_class = val ? 'fa-check text-success' : 'fa-times text-danger'
                   %i.fa{ class: icon_class }
                 - when :association
-                  = link_to val if val.present?
+                  - if val.present?
+                    - if val.is_a?(ActiveRecord::Associations::CollectionProxy)
+                      %ul
+                        - val.each do |val1|
+                          %li= link_to val1
+                    - else
+                      = link_to val if val.present?
                 - else
                   = val
             - (section.columns-slice.size).times do

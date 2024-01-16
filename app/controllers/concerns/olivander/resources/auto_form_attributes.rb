@@ -49,14 +49,14 @@ module Olivander
                 sym = att.name.to_sym
                 type = att.type
                 next unless inc == sym
+                resource_field sym, type
+              end
 
-                reflections.map{ |x| x[1] }
-                            .filter{ |x| x.foreign_key == att.name }
-                            .each do |r|
-                  sym = r.name
-                  type = :association
-                end
-
+              reflections.map{ |x| x[1] }
+              .filter{ |x| x.foreign_key == inc || x.name == inc }
+              .each do |r|
+                sym = r.name
+                type = :association
                 resource_field sym, type
               end
             end

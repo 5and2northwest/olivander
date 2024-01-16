@@ -64,14 +64,12 @@ module Olivander
           label = field_label_for(klazz, key)
           sym = key.gsub('_id', '')
           visible = show.include?(key) || !(default_hidden.include?(key) || hide.include?(key))
-          if link_path.present? && sym == :id
-            link_col sym, link_path, 'id', visible: visible
-          elsif link_path.present? && sym == 'name'
-            link_col sym, link_path, :id, visible: visible
+          if %w[id name first_name last_name display_name title].include?(sym)
+            col sym, visible: visible, action: :show
           elsif sym.include?('.')
             col sym, visible: visible, label: label
           else
-            col sym, visible: visible, label: label, action: :show
+            col sym, visible: visible, label: label
           end
         end
         actions_col

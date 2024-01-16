@@ -1,0 +1,4 @@
+- flash.to_hash.slice("alert", "error", "notice", "success").each do |key, value|
+  .span.alert{ class: "alert-#{flash_class(key)}" }
+    %i.icon{ class: flash_icon(key) }
+    = value
