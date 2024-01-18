@@ -6,14 +6,8 @@
     %span.brand-text.font-weight-light= sidebar_context_name
   / Sidebar
   .sidebar
-    / Sidebar user panel (optional)
-    .user-panel.mt-3.pb-3.mb-3.d-flex
-      .image
-        %img.img-circle.elevation-2{:alt => "User Image", :src => image_path(user_image_path(nil))}/
-      .info
-        = link_to current_user, @context.sign_out_path, method: :delete, class: 'd-block'
     / SidebarSearch Form
-    .form-inline
+    .form-inline{ style: 'padding-top: 7px' }
       .input-group{"data-widget" => "sidebar-search"}
         %input.form-control.form-control-sidebar{"aria-label" => "Search Menu Items", :placeholder => "Search Menu Items", :type => "search"}/
         .input-group-append
