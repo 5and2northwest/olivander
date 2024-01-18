@@ -1,12 +1,13 @@
 PATH
   remote: .
   specs:
-    five-two-nw-olivander (0.1.2.44)
+    five-two-nw-olivander (0.1.2.45)
       chartkick
       devise
       effective_datatables
       effective_resources
       haml-rails (~> 2.0)
+      net-http
       rails (>= 3.2.0)
       simple_form (~> 5.1)
       view_component
