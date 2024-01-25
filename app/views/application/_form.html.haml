@@ -1,4 +1,4 @@
-- read_only = action_name != 'edit'
+- read_only = !%w[edit new].include?(action_name)
 = simple_form_for(@resource) do |f|
   .card.card-primary
     .card-header
@@ -8,7 +8,9 @@
     .card-body
       =f.error_notification
       =f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+      = render_optional_partial 'form_inside_before'
       = render Olivander::Components::ResourceFormComponent.new(@resource, f)
+      = render_optional_partial 'form_inside_after'
     .card-footer.text-right
       = link_to 'Cancel', @_effective_resource.action_path(:index), class: 'btn btn-secondary'
       - unless read_only
