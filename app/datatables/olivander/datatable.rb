@@ -49,7 +49,7 @@ module Olivander
             if ma.confirm
               bulk_action ma.sym, url_for(controller: ma.controller, action: "confirm_#{ma.action}")
             else
-              bulk_action ma.sym, url_for(controller: ma.controller, action: ma.action), data: { turbo_frame: ma.turbo_frame }
+              bulk_action ma.sym, send(ma.path_helper), data: { turbo_frame: ma.turbo_frame }
             end
           end
         end

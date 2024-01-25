@@ -49,15 +49,22 @@ module Olivander
                 sym = att.name.to_sym
                 type = att.type
                 next unless inc == sym
+
                 resource_field sym, type
               end
 
               reflections.map{ |x| x[1] }
-              .filter{ |x| x.foreign_key == inc || x.name == inc }
-              .each do |r|
+                         .filter{ |x| x.foreign_key == inc || x.name == inc }
+                         .each do |r|
                 sym = r.name
                 type = :association
                 resource_field sym, type
+              end
+
+              next unless respond_to?(:attachment_definitions)
+
+              attachment_definitions.filter{ |x| puts x; puts inc; x == inc }.each do |ad|
+                resource_field ad[0], :file
               end
             end
           end

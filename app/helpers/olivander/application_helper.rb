@@ -54,6 +54,14 @@ module Olivander
       action.to_s.titleize
     end
 
+    def resource_form_action_icon(resource, action)
+      key = resource.class.name.underscore
+      return I18n.t("activerecord.actions.#{key}.#{action}-icon") if I18n.exists?("activerecord.actions.#{key}.#{action}-icon")
+      return I18n.t("activerecord.actions.#{action}-icon") if I18n.exists?("activerecord.actions.#{action}-icon")
+
+      action.to_s.titleize
+    end
+
     def resource_field_group_label(resource_class, key)
       i18n_key = "activerecord.attributes.#{resource_class.name.underscore}.resource_field_groups.#{key}"
       I18n.exists?(i18n_key) ? I18n.t(i18n_key) : key.to_s.titleize

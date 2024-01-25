@@ -4,7 +4,7 @@
 
 - if @datatable
   - content_for :datatable do
-    = render_datatable(@datatable, charts: false)
+    = render_datatable(@datatable, charts: false, input_js: { "stripeClasses": [] })
   - content_for :datatable_charts do
     - keys = @datatable._charts.keys
     - ks = keys.size

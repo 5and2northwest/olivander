@@ -101,13 +101,13 @@
     -#     %a.dropdown-item.dropdown-footer{:href => "#"} See All Notifications
     %li.nav-item.dropdown.user-menu
       %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-        %img.user-image.img-circle.elevation-2{:alt => "User Image", :src => image_path(user_image_path(nil))}/
+        %img.user-image.img-circle.elevation-2{:alt => "User Image", :src => image_path(user_image_path(current_user))}/
 
         %span.d-none.d-md-inline= current_user.display_name
       %ul.dropdown-menu.dropdown-menu-lg.dropdown-menu-right
         / User image
         %li.user-header.bg-primary
-          %img.img-circle.elevation-2{:alt => "User Image", src: image_path(user_image_path(nil))}/
+          %img.img-circle.elevation-2{:alt => "User Image", src: image_path(user_image_path(current_user))}/
           %p= current_user.display_name
         / Menu Footer
         %li.user-footer
