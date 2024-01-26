@@ -63,7 +63,7 @@ module Olivander
 
               next unless respond_to?(:attachment_definitions)
 
-              attachment_definitions.filter{ |x| puts x; puts inc; x == inc }.each do |ad|
+              attachment_definitions.filter{ |x| x == inc }.each do |ad|
                 resource_field ad[0], :file
               end
             end

@@ -25,10 +25,16 @@ module Olivander
       routed_resource = route_builder.resources[plural_name.to_sym]
       return [] if routed_resource.nil?
 
-      actions = resource.is_a?(Class) ?
-        (routed_resource.unpersisted_crud_actions | routed_resource.collection_actions.select{ |x| !x.crud_action }) : 
-        (resource.persisted? ? (routed_resource.persisted_crud_actions | routed_resource.member_actions.select{ |x| !x.crud_action }): [])
-      actions = actions.reject{ |a| a.sym == for_action || !EffectiveDatatables.authorization_method.call(controller, a.sym, resource) }
+      actions = if resource.is_a?(Class)
+                  routed_resource.unpersisted_crud_actions | routed_resource.collection_actions.reject(&:crud_action)
+                else
+                  if resource.persisted?
+                    routed_resource.persisted_crud_actions | routed_resource.member_actions.reject(&:crud_action)
+                  else
+                    []
+                  end
+                end
+      actions = actions.select{ |a| authorized_resource_action?(a.sym, resource, for_action) }
       preferred = %i[show edit destroy]
       [].tap do |arr|
         preferred.each do |p|
@@ -40,6 +46,12 @@ module Olivander
           arr << a
         end
       end
+    end
+
+    def authorized_resource_action?(action, resource, except = nil)
+      return false if action == except
+
+      respond_to?('can?') ? can?(action, resource) : true
     end
 
     def resource_form_actions(route_builder, resource, for_action: :show)
