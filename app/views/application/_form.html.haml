@@ -8,9 +8,9 @@
     .card-body
       =f.error_notification
       =f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
-      = render_optional_partial 'form_inside_before'
+      = render_optional_partial 'form_inside_before', locals: {f: f}
       = render Olivander::Components::ResourceFormComponent.new(@resource, f)
-      = render_optional_partial 'form_inside_after'
+      = render_optional_partial 'form_inside_after', locals: {f: f}
     .card-footer.text-right
       = link_to 'Cancel', @_effective_resource.action_path(:index), class: 'btn btn-secondary'
       - unless read_only
