@@ -34,6 +34,8 @@ module Olivander
         end
 
         def self.auto_resource_fields(columns: 2, only: [])
+          return unless ActiveRecord::Base.connection.table_exists?(table_name)
+
           if current_resource_field_group.nil?
             resource_field_group do
               auto_resource_fields(columns: columns, only: only)
