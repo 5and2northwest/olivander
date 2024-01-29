@@ -48,7 +48,7 @@ module Olivander
                 self.columns.collect{ |x| x.name.to_sym },
                 reflections.map{ |r| r[1].name },
               ]
-              only << attachment_definitions.select{ |x| x[0] } unless respond_to?(:attachment_definitions)
+              only << attachment_definitions.select{ |x| x[0] } if respond_to?(:attachment_definitions)
               only = only.flatten - SKIPPED_ATTRIBUTES
             end
             only.each do |inc|
