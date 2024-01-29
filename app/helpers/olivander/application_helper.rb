@@ -94,13 +94,12 @@ module Olivander
       resource.auto_form_attributes
     end
 
-    def render_optional_partial partial, locals: {}
-      begin
-        render partial: partial, locals: locals
-      rescue ActionView::MissingTemplate
-        Rails.logger.debug "did not find partial: #{partial}"
-        nil
-      end
+    def render_optional_partial(partial, locals: {})
+      render partial: partial, locals: locals
+
+    rescue ActionView::MissingTemplate
+      Rails.logger.debug "did not find partial: #{partial}"
+      nil
     end
 
     def field_label_for(resource_class, sym)

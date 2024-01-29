@@ -16,6 +16,8 @@
               %td{ colspan: colspan }
                 - val = @resource.send(f.sym)
                 - case f.type
+                - when :integer, :float
+                  = val
                 - when :string, :text
                   = simple_format(val)
                 - when :boolean

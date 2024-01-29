@@ -43,7 +43,14 @@ module Olivander
               auto_resource_fields(columns: columns, only: only)
             end
           else
-            only = self.columns.collect{ |x| x.name.to_sym } - SKIPPED_ATTRIBUTES if only.size.zero?
+            if only.size.zero?
+              only = [
+                self.columns.collect{ |x| x.name.to_sym },
+                reflections.map{ |r| r[1].name },
+              ]
+              only << attachment_definitions.select{ |x| x[0] } unless respond_to?(:attachment_definitions)
+              only = only.flatten - SKIPPED_ATTRIBUTES
+            end
             only.each do |inc|
               self.columns.each do |att|
                 sym = att.name.to_sym

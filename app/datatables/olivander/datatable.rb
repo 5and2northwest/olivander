@@ -18,14 +18,19 @@ module Olivander
     def self.auto_datatable(klazz, collection: nil, link_path: nil, only: [], except: [], hide: [], show: [], order_by: [], scopes: [])
       Rails.logger.debug "initializing datatable for #{klazz}"
 
-      klazz_attributes = klazz.new.attributes.collect{ |x| x[0] }
+      instance = klazz.new
+      klazz_attributes = instance.attributes.collect{ |x| x[0] }
       column_attributes = klazz_attributes
       column_attributes &&= only if only.size.positive?
       column_attributes -= except if except.size.positive?
       resources_sym = klazz.table_name.to_sym
       bulk_action_list = self::ROUTE_BUILDER.resources[resources_sym]&.datatable_bulk_actions || []
 
-      default_hidden = %w[id created updated created_at updated_at deleted_at current_user current_action]
+      default_hidden = %w[
+        id created updated created_at updated_at
+        deleted_at current_user current_action
+        application_tenant_id created_by_id updated_by_id
+      ]
 
       filters do
         scopes.each do |s|
@@ -60,6 +65,8 @@ module Olivander
         Rails.logger.debug "bulk actions size: #{datatable._bulk_actions.size}"
         Rails.logger.debug "bulk actions size: #{datatable._bulk_actions.size.positive?}"
         # bulk_actions_col if datatable._bulk_actions.size.positive?
+
+        #TODO: use columns from model here instead of attributes keys
         column_attributes.each do |key|
           label = field_label_for(klazz, key)
           sym = key.gsub('_id', '')
@@ -68,6 +75,12 @@ module Olivander
             col sym, visible: visible, action: :show
           elsif sym.include?('.')
             col sym, visible: visible, label: label
+          elsif klazz.columns.select{ |x| x.name == key }.first&.type == :boolean
+            col sym, visible: visible, label: label do |c|
+              val = c.send(sym)
+              icon_class = val ? 'fa-check text-success' : 'fa-times text-danger'
+              "<div class='text-center'><i class='fa fa-icon #{icon_class}'></div>".html_safe
+            end
           else
             col sym, visible: visible, label: label
           end

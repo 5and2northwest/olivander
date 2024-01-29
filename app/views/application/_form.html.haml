@@ -1,8 +1,8 @@
-- read_only = !%w[edit new].include?(action_name)
+- read_only = !%w[new create edit update].include?(action_name)
 = simple_form_for(@resource) do |f|
   .card.card-primary
     .card-header
-      %h3.card-title= @resource
+      %h3.card-title= @resource.to_s.blank? ? @resource.model_name.human : @resource
       .card-tools
         = resource_form_actions(@context.route_builder, @resource, for_action: action_name.to_sym)
     .card-body
