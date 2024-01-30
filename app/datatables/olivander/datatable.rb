@@ -62,8 +62,6 @@ module Olivander
 
       datatable do
         order(order_by[0], order_by[1]) if order_by.size == 2
-        Rails.logger.debug "bulk actions size: #{datatable._bulk_actions.size}"
-        Rails.logger.debug "bulk actions size: #{datatable._bulk_actions.size.positive?}"
         # bulk_actions_col if datatable._bulk_actions.size.positive?
 
         #TODO: use columns from model here instead of attributes keys

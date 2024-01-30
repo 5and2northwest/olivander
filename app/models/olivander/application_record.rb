@@ -3,8 +3,7 @@ module Olivander
     self.abstract_class = true
 
     def self.audited_as klazz
-      Rails.logger.debug "#{self.class.name} is audited as #{klazz.name}"
-
+      # Rails.logger.debug "#{self.class.name} is audited as #{klazz.name}"
       @@audited_user_class = klazz
 
       belongs_to :created_by, class_name: klazz.name
