@@ -51,10 +51,11 @@ module Olivander
       if bulk_action_list.size.positive?
         bulk_actions do
           bulk_action_list.each do |ma|
+            label = resource_form_action_label(instance, ma.action)
             if ma.confirm
-              bulk_action ma.sym, url_for(controller: ma.controller, action: "confirm_#{ma.action}")
+              bulk_action label, url_for(controller: ma.controller, action: "confirm_#{ma.action}")
             else
-              bulk_action ma.sym, send(ma.path_helper), data: { turbo_frame: ma.turbo_frame }
+              bulk_action label, send(ma.path_helper), data: { turbo_frame: ma.turbo_frame }
             end
           end
         end
