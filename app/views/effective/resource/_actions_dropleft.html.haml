@@ -19,8 +19,7 @@
             = dropdown_link_to resource_form_action_label(resource, a.sym), path, data: data, method: a.verb
   - crud_actions.each do |a|
     - path = a.path_helper.is_a?(Proc) ? a.path_helper.call(resource) : send(a.path_helper, resource.id)
-    - data = a.turbo_frame.present? ? { turbo: true, turbo_frame: a.turbo_frame } : {}
     - icon_class = (a.verb == :delete ? '' : '')
-    = link_to path, data: data, method: a.verb, title: resource_form_action_label(resource, a.sym), class: "btn btn-sm #{icon_class}" do
+    = link_to path, a.args_hash(title: resource_form_action_label(resource, a.sym), class: "btn btn-sm #{icon_class}") do
       %i{ class: resource_form_action_icon(resource, a.sym), style: 'display: block; font-size: 10px' }
       %span{ style: 'font-size: 12px' }= resource_form_action_label(resource, a.sym)

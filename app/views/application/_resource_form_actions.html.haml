@@ -7,10 +7,6 @@
         %i.fa{ class: I18n.t(icon_key)}
       = resource_form_action_label(@resource, a.sym)
 
-    - if a.turbo_frame.blank?
-      = link_to({ controller: a.controller, action: a.action }, method: a.verb, class: 'btn btn-tool') do
-        = yield cf_sym
-    - else
-      = link_to({ controller: a.controller, action: a.action }, class: 'btn btn-tool', data: { turbo: true, turbo_method: a.verb, turbo_frame: a.turbo_frame }) do
-        = yield cf_sym
+    = link_to({ controller: a.controller, action: a.action }, a.args_hash(class: 'btn btn-tool')) do
+      = yield cf_sym
     &nbsp;

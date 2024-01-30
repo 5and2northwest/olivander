@@ -3,10 +3,12 @@ module Olivander
     class ResourceAction
       attr_accessor :sym, :action, :verb, :confirm, :turbo_frame, :collection,
                     :controller, :crud_action, :show_in_form, :show_in_datatable,
-                    :no_route, :path_helper
+                    :no_route, :path_helper, :confirm_with
 
-      def initialize(sym, action: nil, controller: nil, verb: :get, confirm: false, turbo_frame: nil, collection: false, crud_action: false,
-                     show_in_form: true, show_in_datatable: true, no_route: false, path_helper: nil)
+      def initialize(sym, action: nil, controller: nil, verb: :get, confirm: false,
+                     turbo_frame: nil, collection: false, crud_action: false,
+                     show_in_form: true, show_in_datatable: true, no_route: false,
+                     path_helper: nil, confirm_with: nil)
         self.sym = sym
         self.action = action || sym
         self.controller = controller
@@ -19,6 +21,35 @@ module Olivander
         self.show_in_datatable = show_in_datatable
         self.no_route = no_route
         self.path_helper = path_helper
+        self.confirm_with = confirm_with
+      end
+
+      def args_hash(options = nil)
+        {}.tap do |h|
+          h.merge!(method: verb) if turbo_frame.blank?
+          h.merge!(data: data_hash)
+          h.merge!(options) if options.present?
+        end
+      end
+
+      def data_hash
+        {}.tap do |h|
+          h.merge!(turbo: true, turbo_method: verb, turbo_frame: turbo_frame) if turbo_frame.present?
+
+          message = confirmation_message
+          h.merge!(confirm_key => message) unless message.blank?
+        end
+      end
+
+      def confirm_key
+        turbo_frame.present? ? :turbo_confirm : :confirm
+      end
+
+      def confirmation_message
+        return confirm_with if confirm_with.present?
+        return I18n.t('activerecord.actions.delete-confirmation') if verb == :delete
+
+        nil
       end
     end
 
@@ -99,13 +130,16 @@ module Olivander
         end
 
         def action(sym, verb: :get, confirm: false, turbo_frame: nil, collection: false, show_in_datatable: true,
-                   show_in_form: true, no_route: false, controller: nil, action: nil, path_helper: nil)
+                   show_in_form: true, no_route: false, controller: nil, action: nil, path_helper: nil,
+                   confirm_with: nil
+                  )
           raise 'Must be invoked in a resource block' unless current_resource.present?
 
           controller ||= current_resource.model
           current_resource.actions << ResourceAction.new(
             sym, action: action, controller: controller, verb: verb, confirm: confirm, turbo_frame: turbo_frame, collection: collection,
-            show_in_datatable: show_in_datatable, show_in_form: show_in_form, no_route: no_route, path_helper: path_helper
+            show_in_datatable: show_in_datatable, show_in_form: show_in_form, no_route: no_route, path_helper: path_helper,
+            confirm_with: confirm_with
           )
         end
 
