@@ -13,7 +13,7 @@
       .row{ data: { controller: 'datatable-index-charts' }}
         - keys.each do |k|
           - chart = @datatable._charts[k]
-          %div{ class: "#{col_class_num('xl', ks, 3)} #{col_class_num('lg', ks, 2)} #{col_class_num('md', ks, 6)} #{col_class_num('sm', ks, 6)}"}
+          %div{ class: "#{chart_column_class_num('xl', ks, 3)} #{chart_column_class_num('lg', ks, 2)} #{chart_column_class_num('md', ks, 6)} #{chart_column_class_num('sm', ks, 6)}"}
             .card.card-primary{ data: { controller: 'datatable-expandable-chart' } }
               .card-header
                 %h3.card-title= I18n.t([@datatable.class.name.underscore, 'charts', k].join('.'))

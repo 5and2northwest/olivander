@@ -1,5 +1,20 @@
 module Olivander
   module ApplicationHelper
+    def chart_column_class_num(label, count, min)
+      return "col-#{label}-#{min}" if count >= 12
+      modded = count % 12
+      divisor = modded.zero? ? 1 : modded
+      "col-#{label}-#{[12/divisor, min].max}"
+  
+      divisor = count
+      result = 12/divisor
+      while result < min
+        divisor = divisor/2
+        result = 12/divisor
+      end
+      "col-#{label}-#{result}"
+    end
+
     def page_title
       cf = content_for(:title)
       return cf unless cf.blank?
