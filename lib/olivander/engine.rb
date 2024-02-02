@@ -6,6 +6,7 @@ module Olivander
       app.config.assets.precompile += %w[
         adminlte.js datatable_index_charts_controller.js
         datatable_expandable_chart_controller.js
+        turbo_flash_controller.js
         adminlte.css avatar0.png avatar1.png avatar2.png avatar3.png avatar4.png]
     end
 

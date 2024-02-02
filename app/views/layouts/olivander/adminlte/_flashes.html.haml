@@ -1,2 +1,3 @@
-- flash.each do |f|
-  = f.to_s.html_safe
+%turbo-frame#turbo-flashes
+  - flash.each do |key, value|
+    %turbo-flash{data: {controller: 'turbo-flash', flash: {style: key}}}= value
