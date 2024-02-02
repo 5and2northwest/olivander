@@ -3,7 +3,7 @@
   / Left navbar links
   %ul.navbar-nav
     %li.nav-item
-      %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button"}
+      %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button", 'data-enable-remember': "true"}
         %i.fas.fa-bars
     - @context.visible_modules.each do |menu_item|
       %li.nav-item.d-none.d-sm-inline-block
@@ -115,9 +115,9 @@
             Profile
           = link_to @context.sign_out_path, method: :delete, class: 'btn btn-default btn-flat float-right' do
             Sign out
-    -# %li.nav-item
-    -#   %a.nav-link{title: 'Full Screen Mode', "data-widget" => "fullscreen", :href => "#", :role => "button"}
-    -#     %i.fas.fa-expand-arrows-alt
+    %li.nav-item
+      %a.nav-link{title: 'Full Screen Mode', "data-widget" => "fullscreen", :href => "#", :role => "button"}
+        %i.fas.fa-expand-arrows-alt
     -# %li.nav-item
     -#   %a.nav-link{title: 'Show Sidebar Options', "data-controlsidebar-slide" => "true", "data-widget" => "control-sidebar", :href => "#", :role => "button"}
     -#     %i.fas.fa-th-large

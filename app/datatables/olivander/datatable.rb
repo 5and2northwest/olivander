@@ -80,6 +80,10 @@ module Olivander
               icon_class = val ? 'fa-check text-success' : 'fa-times text-danger'
               "<div class='text-center'><i class='fa fa-icon #{icon_class}'></div>".html_safe
             end
+          elsif sym == 'avatar'
+            col sym, visible: visible, label: label, search: false, sort: false do |c|
+              "<div class='image'><img  style='max-height: 25px; max-width: 25px' class='img-circle elevation-2' src='#{c.send(sym).expiring_url}'></div>".html_safe
+            end
           else
             col sym, visible: visible, label: label
           end

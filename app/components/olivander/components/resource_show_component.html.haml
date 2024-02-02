@@ -34,7 +34,7 @@
                 - when :file
                   - if val.present?
                     - if val.content_type.include?('image')
-                      %img{ src: val.expiring_url }
+                      %img.user-image{ src: val.expiring_url, style: 'max-height: 50px; max-width: 50px' }
                     - else
                       = link_to val, val.expiring_url
                 - else
