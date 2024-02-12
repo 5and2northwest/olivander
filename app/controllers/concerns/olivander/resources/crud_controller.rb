@@ -8,7 +8,7 @@ module Olivander
         layout 'olivander/adminlte/main'
 
         def index
-          if params[:term].present?
+          if request.format == :json && params[:_type].present? && params[:_type] == 'query'
             index_search
           else
             super
@@ -27,6 +27,7 @@ module Olivander
             orders = fields.join(', ')
             self.resources = self.resources.where(clauses).order(orders) if clauses.length.positive?
           end
+          self.resources = self.resources.limit(25)
         end
 
         def permitted_params

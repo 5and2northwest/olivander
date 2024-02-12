@@ -2,18 +2,17 @@ module Olivander
   class ApplicationContext
     attr_accessor :name, :logo, :company, :menu_items, :route_builder, :sign_out_path, :sidebar_background_class
 
-    def self.default
-      ctx = ApplicationContext.new
-      ctx.company.name = 'Company Name'
-      ctx
-    end
-
-    def initialize(name: 'Application Name', logo: Logo.new, company: Company.new, sign_out_path: '/sign_out', menu_items: [])
-      self.name = name
-      self.logo = logo
-      self.company = company
-      self.sign_out_path = sign_out_path
-      self.menu_items = menu_items
+    def initialize(**kwargs)
+      self.name = kwargs[:name] || ENV['OLIVANDER_APP_NAME'] || 'Application Name'
+      self.logo = kwargs[:logo] || Logo.new(url: kwargs[:logo_url], alt: kwargs[:logo_alt])
+      self.company = kwargs[:company] || Company.new(name: kwargs[:company_name], url: kwargs[:company_url])
+      self.sign_out_path = kwargs[:sign_out_path] || '/sign_out'
+      self.menu_items = kwargs[:menu_items] || []
+      begin
+        self.route_builder = RouteBuilder.new
+      rescue NameError
+        self.route_builder = OpenStruct.new(resources: {})
+      end
     end
 
     def visible_modules
@@ -36,19 +35,50 @@ module Olivander
     class Logo
       attr_accessor :url, :alt
 
-      def initialize(url: nil, alt: 'Logo')
-        self.url = url
-        self.alt = alt
+      def initialize(**kwargs)
+        self.url = kwargs[:url] || ENV['OLIVANDER_LOGO_URL'] || '/images/olivander_logo.png'
+        self.alt = kwargs[:alt] || ENV['OLIVANDER_LOGO_ALT'] || 'Logo Image'
       end
     end
 
     class Company
       attr_accessor :name, :url
 
-      def initialize(name: nil, url: nil)
-        self.url = url
-        self.name = name
+      def initialize(**kwargs)
+        self.url = kwargs[:url] || ENV['OLIVANDER_COMPANY_URL'] || '/'
+        self.name = kwargs[:name] || ENV['OLIVANDER_COMPANY_NAME'] || 'Company Name'
       end
+    end
+  end
+
+  class CurrentContext < ActiveSupport::CurrentAttributes
+    attribute :application_context
+    attribute :user, :ability
+
+    def build(&block)
+      self.application_context ||= ::Olivander::ApplicationContext.new
+      self.user ||= build_dummy_user
+      self.ability ||= build_dummy_ability
+      yield(self, application_context, user, ability) if block_given?
+      self
+    end
+
+    private
+
+    def build_dummy_user
+      OpenStruct.new({ display_name: 'No User Set' })
+    end
+
+    def build_dummy_ability
+      Class.new do
+        def can?(_action, _resource)
+          true
+        end
+
+        def authorize!(_action, _resource)
+          true
+        end
+      end.new
     end
   end
 end

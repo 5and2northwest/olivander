@@ -24,8 +24,7 @@ module Olivander
       column_attributes &&= only if only.size.positive?
       column_attributes -= except if except.size.positive?
       resources_sym = klazz.table_name.to_sym
-      bulk_action_list = self::ROUTE_BUILDER.resources[resources_sym]&.datatable_bulk_actions || []
-
+      bulk_action_list = Olivander::CurrentContext.application_context.route_builder.resources[resources_sym]&.datatable_bulk_actions || []
       default_hidden = %w[
         id created updated created_at updated_at
         deleted_at current_user current_action

@@ -23,14 +23,20 @@
                 - when :boolean
                   - icon_class = val ? 'fa-check text-success' : 'fa-times text-danger'
                   %i.fa{ class: icon_class }
-                - when :association
+                - when :association, :belongs_to_association, :has_many_association, :has_many_through_association, :has_and_belongs_to_many_reflection, :has_one_through_association
                   - if val.present?
                     - if val.is_a?(ActiveRecord::Associations::CollectionProxy)
                       %ul
                         - val.each do |val1|
-                          %li= link_to val1
+                          - begin
+                            %li= link_to val1
+                          - rescue 
+                            %li= val1
                     - else
-                      = link_to val if val.present?
+                      - begin
+                        = link_to val if val.present?
+                      - rescue
+                        = val if val.present?
                 - when :file
                   - if val.present?
                     - if val.content_type.include?('image')
@@ -38,7 +44,6 @@
                     - else
                       = link_to val, val.expiring_url
                 - else
-                  = f.type
                   = val
             - (section.columns-slice.size).times do
               %th

@@ -2,7 +2,7 @@
   %strong
     Copyright © #{Date.current.year}
     = succeed "." do
-      = link_to @context.company.name, @context.company.url
+      = link_to Olivander::CurrentContext.application_context.company.name, Olivander::CurrentContext.application_context.company.url
   All rights reserved.
   .float-right.d-none.d-sm-inline-block
     .text-small

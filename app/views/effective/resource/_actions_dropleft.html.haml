@@ -1,25 +1,30 @@
-- route_builder = @context&.route_builder || datatable.class::ROUTE_BUILDER
 -# = dropdown(variation: :dropleft, btn_class: btn_class) do
--#   - authorized_resource_actions(route_builder, resource, for_action: action_name).select{ |x| x.show_in_datatable }.each do |a|
+-#   - authorized_resource_actions(resource, for_action: action_name).select{ |x| x.show_in_datatable }.each do |a|
 -#     - path = a.path_helper.is_a?(Proc) ? a.path_helper.call(resource) : send(a.path_helper, resource.id)
 -#     - data = a.turbo_frame.present? ? { turbo: true, turbo_frame: a.turbo_frame } : {}
 -#     = dropdown_link_to resource_form_action_label(resource, a.sym), path, data: data
-- actions = authorized_resource_actions(route_builder, resource, for_action: action_name).select{ |x| x.show_in_datatable }
-- crud_actions = actions.select{ |a| a.crud_action }
-- non_crud_actions = actions.select{ |a| !a.crud_action }
+- actions = authorized_resource_actions(resource, for_action: action_name).select{ |x| x.show_in_datatable }
+- primary_actions = actions.select{ |a| a.primary }
+- non_primary_actions = actions.select{ |a| !a.primary }
 .btn-group
-  - if non_crud_actions.size.positive?
+  - if non_primary_actions.size.positive?
     .btn-group
       %button.btn.btn-sm.dropdown-toggle{ type: :button, data: { toggle: 'dropdown' }}
       %ul.dropdown-menu
-        - non_crud_actions.each do |a|
+        - non_primary_actions.each do |a|
           - path = a.path_helper.is_a?(Proc) ? a.path_helper.call(resource) : send(a.path_helper, resource.id)
-          - data = a.turbo_frame.present? ? { turbo: true, turbo_frame: a.turbo_frame } : {}
+          - hash = {}
+          - data = a.turbo_frame.present? ? { turbo: true, turbo_frame: a.turbo_frame, turbo_method: a.verb } : {}
+          - hash[:data] = data
+          - hash[:method] = a.verb unless a.turbo_frame.present?
           %li
-            = dropdown_link_to resource_form_action_label(resource, a.sym), path, data: data, method: a.verb
-  - crud_actions.each do |a|
+            = dropdown_link_to resource_form_action_label(resource, a.sym), path, hash
+  - primary_actions.each do |a|
     - path = a.path_helper.is_a?(Proc) ? a.path_helper.call(resource) : send(a.path_helper, resource.id)
     - icon_class = (a.verb == :delete ? '' : '')
-    = link_to path, a.args_hash(title: resource_form_action_label(resource, a.sym), class: "btn btn-sm #{icon_class}") do
-      %i{ class: resource_form_action_icon(resource, a.sym), style: 'display: block; font-size: 10px' }
-      %span{ style: 'font-size: 12px' }= resource_form_action_label(resource, a.sym)
+    = link_to path, a.args_hash(title: resource_form_action_tooltip(resource, a.sym), class: "btn btn-sm #{icon_class}") do
+      - action_label = resource_form_action_label(resource, a.sym)
+      - icon_font_size = action_label.blank? ? '18px' : '10px'
+      %i{ class: resource_form_action_icon(resource, a.sym), style: "display: block; font-size: #{icon_font_size}" }
+      - unless action_label.blank?
+        %span{ style: 'font-size: 12px' }= action_label

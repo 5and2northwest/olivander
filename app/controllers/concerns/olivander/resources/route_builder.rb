@@ -3,12 +3,12 @@ module Olivander
     class ResourceAction
       attr_accessor :sym, :action, :verb, :confirm, :turbo_frame, :collection,
                     :controller, :crud_action, :show_in_form, :show_in_datatable,
-                    :no_route, :path_helper, :confirm_with
+                    :no_route, :path_helper, :confirm_with, :primary
 
       def initialize(sym, action: nil, controller: nil, verb: :get, confirm: false,
                      turbo_frame: nil, collection: false, crud_action: false,
                      show_in_form: true, show_in_datatable: true, no_route: false,
-                     path_helper: nil, confirm_with: nil)
+                     path_helper: nil, confirm_with: nil, primary: nil)
         self.sym = sym
         self.action = action || sym
         self.controller = controller
@@ -22,6 +22,7 @@ module Olivander
         self.no_route = no_route
         self.path_helper = path_helper
         self.confirm_with = confirm_with
+        self.primary = primary || crud_action
       end
 
       def args_hash(options = nil)
@@ -131,7 +132,7 @@ module Olivander
 
         def action(sym, verb: :get, confirm: false, turbo_frame: nil, collection: false, show_in_datatable: true,
                    show_in_form: true, no_route: false, controller: nil, action: nil, path_helper: nil,
-                   confirm_with: nil
+                   confirm_with: nil, primary: nil
                   )
           raise 'Must be invoked in a resource block' unless current_resource.present?
 
@@ -139,7 +140,7 @@ module Olivander
           current_resource.actions << ResourceAction.new(
             sym, action: action, controller: controller, verb: verb, confirm: confirm, turbo_frame: turbo_frame, collection: collection,
             show_in_datatable: show_in_datatable, show_in_form: show_in_form, no_route: no_route, path_helper: path_helper,
-            confirm_with: confirm_with
+            confirm_with: confirm_with, primary: primary
           )
         end
 

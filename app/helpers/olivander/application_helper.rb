@@ -34,10 +34,10 @@ module Olivander
       user.avatar_path
     end
 
-    def authorized_resource_actions(route_builder, resource, for_action: :show)
+    def authorized_resource_actions(resource, for_action: :show)
       raw_name = resource.is_a?(Class) ? resource.name : resource.class.name
       plural_name = raw_name.demodulize.underscore.pluralize
-      routed_resource = route_builder.resources[plural_name.to_sym]
+      routed_resource = Olivander::CurrentContext.application_context.route_builder.resources[plural_name.to_sym]
       return [] if routed_resource.nil?
 
       actions = if resource.is_a?(Class)
@@ -69,8 +69,16 @@ module Olivander
       respond_to?('can?') ? can?(action, resource) : true
     end
 
-    def resource_form_actions(route_builder, resource, for_action: :show)
-      render partial: 'resource_form_actions', locals: { actions: authorized_resource_actions(route_builder, resource, for_action: for_action).select(&:show_in_form) }
+    def resource_form_actions(resource, for_action: :show)
+      render partial: 'resource_form_actions', locals: { actions: authorized_resource_actions(resource, for_action: for_action).select(&:show_in_form) }
+    end
+
+    def resource_form_action_tooltip(resource, action)
+      key = resource.class.name.underscore
+      return I18n.t("activerecord.actions.#{key}.#{action}-tooltip") if I18n.exists?("activerecord.actions.#{key}.#{action}-tooltip")
+      return I18n.t("activerecord.actions.#{action}-tooltip") if I18n.exists?("activerecord.actions.#{action}-tooltip")
+
+      action.to_s.titleize
     end
 
     def resource_form_action_label(resource, action)
@@ -95,11 +103,11 @@ module Olivander
     end
 
     def current_user
-      controller.respond_to?(:current_user) ? controller.current_user : nil
+      Olivander::CurrentContext.user
     end
 
     def current_ability
-      controller.respond_to?(:current_ability) ? controller.current_ability : nil
+      Olivander::CurrentContext.ability
     end
 
     def resource_attributes(resource, effective_resource)
@@ -130,7 +138,7 @@ module Olivander
     end
 
     def sidebar_context_name
-      [@context.name, sidebar_context_suffix&.upcase].reject{ |x| x.blank? or x == 'PRODUCTION' }.join(' ')
+      [Olivander::CurrentContext.application_context.name, sidebar_context_suffix&.upcase].reject{ |x| x.blank? or x == 'PRODUCTION' }.join(' ')
     end
 
     def sidebar_context_suffix
@@ -144,7 +152,7 @@ module Olivander
     end
 
     def sidebar_background_class
-      @context.sidebar_background_class ||
+      Olivander::CurrentContext.application_context.sidebar_background_class ||
         ENV['SIDEBAR_BACKGROUND_CLASS'] ||
         (is_dev_environment? ? 'bg-danger' : 'bg-info')
     end

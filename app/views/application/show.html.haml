@@ -10,7 +10,7 @@
         .card-header
           %h3.card-title= @resource.to_s
           .card-tools
-            = resource_form_actions(@context.route_builder, @resource, for_action: action_name.to_sym)
+            = resource_form_actions(@resource, for_action: action_name.to_sym)
         .card-body
           = render_optional_partial 'show_inside_before'
           = render Olivander::Components::ResourceShowComponent.new(@resource, [])

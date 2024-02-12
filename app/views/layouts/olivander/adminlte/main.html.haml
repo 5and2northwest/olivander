@@ -1,6 +1,5 @@
 !!!
 %html
-  - @context ||= Olivander::ApplicationContext.default
   = render partial: 'layouts/olivander/adminlte/head'
   - sidebar_collapse = cookies['lte.pushmenu.collapsed'] == 'true' ? 'sidebar-collapse' : ''
   %body.hold-transition.sidebar-mini.layout-fixed{ class: sidebar_collapse }

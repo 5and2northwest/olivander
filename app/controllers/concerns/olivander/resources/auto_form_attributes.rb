@@ -8,10 +8,10 @@ module Olivander
           attributes.keys - ['updated_at', 'created_at', 'deleted_at']
         end
 
-        def self.method_missing(m, *args, &block)
+        def self.method_missing(m, *args, **kwargs, &block)
           if %i[auto_resource_fields resource_field_groups resource_field_group].include?(m)
             include(Olivander::Resources::ResourceFields)
-            send(m, *args, &block)
+            send(m, *args, **kwargs, &block)
           else
             super
           end
@@ -33,16 +33,16 @@ module Olivander
           self.resource_field_group_collection
         end
 
-        def self.auto_resource_fields(columns: 2, only: [], editable: true)
+        def self.auto_resource_fields(columns: 2, only: [], except: [], editable: true)
           return unless ActiveRecord::Base.connection.table_exists?(table_name)
 
           if current_resource_field_group.nil?
             resource_field_group do
-              auto_resource_fields(columns: columns, only: only, editable: editable)
+              auto_resource_fields(columns: columns, only: only, except: except, editable: editable)
             end
           elsif current_resource_field_group.forced_section.nil?
             resource_field_section(columns) do
-              auto_resource_fields(columns: columns, only: only, editable: editable)
+              auto_resource_fields(columns: columns, only: only, except: except, editable: editable)
             end
           else
             if only.size.zero?
@@ -53,6 +53,7 @@ module Olivander
               only << attachment_definitions.select{ |x| x[0] } if respond_to?(:attachment_definitions)
               only = only.flatten - SKIPPED_ATTRIBUTES
             end
+            only = only - except
             only.each do |inc|
               self.columns.each do |att|
                 sym = att.name.to_sym
@@ -65,7 +66,11 @@ module Olivander
               reflections.map{ |x| x[1] }
                          .filter{ |x| x.foreign_key == inc || x.name == inc }
                          .each do |r|
-                resource_field r.name, :association, editable: editable
+                begin
+                  resource_field(r.name, r.association_class.name.demodulize.underscore.to_sym, editable: editable)
+                rescue NotImplementedError
+                  resource_field(r.name, :association, editable: editable)
+                end
               end
 
               next unless respond_to?(:attachment_definitions)
