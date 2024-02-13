@@ -6,8 +6,10 @@
         %div{ class: section.column_class }
           - case field.type
           - when :association
-            = @f.association field.sym, disabled: !field.editable, input_html: { data: { controller: "input-control-#{field.type}" } }
+            - controllers = "#{field.type}-#{@resource.class.name.underscore}-#{field.sym} input-control-#{field.type}"
+            - collection_path = polymorphic_path(@resource.class.reflect_on_association(field.sym).klass, format: :json)
+            = @f.association field.sym, collection: [@f.object.send(field.sym)].flatten, disabled: !field.editable, input_html: { data: { collection_path: collection_path, controller: controllers } }
           - when :boolean 
             = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: { controller: "input-control-#{field.type}" } }, wrapper: :checkbox
           - else 
-            = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: { controller: "input-control-#{field.type}" } }
+            = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { rows: 10, data: { controller: "input-control-#{field.type}" } }

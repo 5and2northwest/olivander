@@ -1,5 +1,5 @@
 - read_only = !%w[new create edit update].include?(action_name)
-= simple_form_for(@resource) do |f|
+= simple_form_for(@resource, builder: CustomFormBuilder) do |f|
   .card.card-primary
     .card-header
       %h3.card-title= @resource.to_s.blank? ? @resource.model_name.human : @resource

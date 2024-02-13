@@ -11,13 +11,13 @@ $.fn.select2.defaults.set('dropdownParent', $('#modal-root'))
 #
 # TODO: Recheck with the select2 GH issue and remove once this is fixed on their side
 #
-$(document).on 'select2:open', () =>
-  document.querySelector('.select2-search__field').focus()
+$(document).on 'select2:open', (evt) =>
+  evt.target.parent.querySelector('.select2-search__field').focus()
 
 initSelect2s = () -> $('select').not('.no-select2').each (k,v) =>
   $(v).select2({ dropdownParent: $(v).parent() })
 
-$(document).ready -> initSelect2s()
+# $(document).ready -> initSelect2s()
 $(document).on 'show.bs.modal', (e) =>
   $('select').not('.no-select2').each (k,v) =>
     $(v).select2({ dropdownParent: $(v).parent() })
