@@ -4,7 +4,7 @@
   %body.hold-transition.login-page
     .login-box
       -# .login-logo
-      -#   %img.brand-image.img-circle.elevation-3{:alt => @context.logo.alt, :src => @context.logo.url, :style => "opacity: .8"}
+      -#   %img.brand-image.img-circle.elevation-3{:alt => Olivander::CurrentContext.application_context.logo.alt, :src => Olivander::CurrentContext.application_context.logo.url, :style => "opacity: .8"}
       .card
         .card-header.text-center{ class: sidebar_background_class }
           %a.h1{ href: '/' }

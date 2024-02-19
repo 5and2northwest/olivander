@@ -33,7 +33,7 @@
       .card-header
         %h3.card-title= page_title
         .card-tools
-          = resource_form_actions(@context.route_builder, resource.klass, for_action: :index)
+          = resource_form_actions(resource.klass, for_action: :index)
       .card-body
         - if @datatable
           = content_for :datatable

@@ -12,7 +12,11 @@ $.fn.select2.defaults.set('dropdownParent', $('#modal-root'))
 # TODO: Recheck with the select2 GH issue and remove once this is fixed on their side
 #
 $(document).on 'select2:open', (evt) =>
-  evt.target.parent.querySelector('.select2-search__field').focus()
+  try
+    evt.target.parent.querySelector('.select2-search__field').focus()
+  catch ex
+    evt.target.parentElement.querySelector('.select2-search__field').focus()
+
 
 initSelect2s = () -> $('select').not('.no-select2').each (k,v) =>
   $(v).select2({ dropdownParent: $(v).parent() })
@@ -21,3 +25,11 @@ initSelect2s = () -> $('select').not('.no-select2').each (k,v) =>
 $(document).on 'show.bs.modal', (e) =>
   $('select').not('.no-select2').each (k,v) =>
     $(v).select2({ dropdownParent: $(v).parent() })
+
+$(document).ready =>
+  $('.effective-datatables-filters').find('select').select2('destroy');
+  $('.dataTables_wrapper').each (_, o) =>
+    try
+      return $(o).find('.dataTables_length select.select2-hidden-accessible').addClass('no-select2').removeAttr('name').select2('destroy');
+    catch error
+      # don't care

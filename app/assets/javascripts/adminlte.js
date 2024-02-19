@@ -19,3 +19,4 @@
 //= require "adminlte/dist/js/adminlte.js"
 //= require 'olivander/flash_toast'
 //= require "effective_datatables"
+//= require "adminlte/datatable.fix.js"

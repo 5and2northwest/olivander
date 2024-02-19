@@ -2,7 +2,7 @@
 %aside.main-sidebar.sidebar-dark-primary.elevation-4{ data: { controller: 'left-nav' }}
   / Brand Logo
   %a.brand-link{ href: "/", class: sidebar_background_class }
-    %img.brand-image.img-circle.elevation-3{:alt => @context.logo.alt, :src => @context.logo.url, :style => "opacity: .8"}/
+    %img.brand-image.img-circle.elevation-3{:alt => Olivander::CurrentContext.application_context.logo.alt, :src => Olivander::CurrentContext.application_context.logo.url, :style => "opacity: .8"}/
     %span.brand-text.font-weight-light= sidebar_context_name
   / Sidebar
   .sidebar
@@ -16,7 +16,7 @@
     / Sidebar Menu
     %nav.mt-2
       %ul.nav.nav-pills.nav-sidebar.nav-compact.flex-column{"data-accordion" => "false", "data-widget" => "treeview", :role => "menu"}
-        - @context.menu_items.each do |menu_item|
+        - Olivander::CurrentContext.application_context.menu_items.each do |menu_item|
           = render Olivander::Components::MenuItemComponent.new(menu_item)
 
 

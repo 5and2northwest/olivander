@@ -5,10 +5,19 @@
       - section.fields.each do |field|
         %div{ class: section.column_class }
           - case field.type
-          - when :association
-            - controllers = "#{field.type}-#{@resource.class.name.underscore}-#{field.sym} input-control-#{field.type}"
-            - collection_path = polymorphic_path(@resource.class.reflect_on_association(field.sym).klass, format: :json)
-            = @f.association field.sym, collection: [@f.object.send(field.sym)].flatten, disabled: !field.editable, input_html: { data: { collection_path: collection_path, controller: controllers } }
+          - when :association, :belongs_to_association, :has_many_association, :has_many_through_association, :has_and_belongs_to_many_reflection, :has_one_through_association
+            - reflection = @f.object.class.reflect_on_association(field.sym)
+            - controllers = "#{field.type}-#{@resource.class.name.underscore.gsub('/', '_')}-#{field.sym} input-control-association"
+            - begin
+              - collection_path = polymorphic_path(@resource.class.reflect_on_association(field.sym).klass, format: :json)
+            - rescue
+              - collection_path = ''
+            - collection = @f.object.send(field.sym)
+            - case field.type
+            - when :has_one_through_association
+              = @f.input field.sym, selected: collection, collection: [collection].flatten, disabled: !field.editable, input_html: { data: { collection_path: collection_path, controller: controllers } }
+            -else
+              = @f.association field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: { collection_path: collection_path, controller: controllers } }
           - when :boolean 
             = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: { controller: "input-control-#{field.type}" } }, wrapper: :checkbox
           - else 
