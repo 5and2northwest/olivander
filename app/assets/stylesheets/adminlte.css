@@ -22,6 +22,7 @@
  *= require 'adminlte/plugins/select2/css/select2-bootstrap4.min.css'
  *= require 'adminlte/plugins/fontawesome-free/css/all.min'
  *= require 'adminlte/plugins/toastr/toastr.min.css'
+ *= require 'adminlte/plugins/ekko-lightbox/ekko-lightbox.css'
  *= require effective_datatables
  *= require_tree .
  *= require_self

@@ -15,6 +15,8 @@
 //= require "adminlte/plugins/sweetalert2/sweetalert2.all.min.js"
 //= require "adminlte/plugins/select2/js/select2.full.min.js"
 //= require "adminlte/plugins/toastr/toastr.min.js"
+//= require "adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js"
+//= require "adminlte/plugins/filterizr/jquery.filterizr.min.js"
 //= require "adminlte/select2_defaults"
 //= require "adminlte/dist/js/adminlte.js"
 //= require 'olivander/flash_toast'
