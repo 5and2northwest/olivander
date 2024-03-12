@@ -6,6 +6,7 @@ module Olivander
       included do
         include Effective::CrudController
         layout 'olivander/adminlte/main'
+        before_action :fix_date_params
 
         def index
           if request.format == :json && params[:_type].present? && params[:_type] == 'query'
@@ -17,6 +18,25 @@ module Olivander
 
         def index_search
           self.resources ||= resource_scope.all if resource_scope.respond_to?(:all)
+          index_term_search if params[:term].present?
+          index_param_search
+          if resources.order_values.size.zero? && resources.model.implicit_order_column.present?
+            self.resources = resources.order(resources.model.implicit_order_column.to_sym)
+          end
+          self.resources = self.resources.limit(25)
+        end
+
+        def index_param_search
+          params.each do |param|
+            effective_resource.klass.columns.each do |col|
+              next unless col.name == param[0] #&& !param[1].blank?
+
+              self.resources = self.resources.where(param[0].to_sym => param[1])
+            end
+          end
+        end
+
+        def index_term_search
           if resource_scope.respond_to?(:search_for)
             self.resources = self.resources.search_for(params[:term])
           else
@@ -31,7 +51,6 @@ module Olivander
             self.resources = self.resources.where(clauses) if clauses.present? && clauses.length.positive?
             self.resources = self.resources.order(orders) if orders.length.positive?
           end
-          self.resources = self.resources.limit(25)
         end
 
         def permitted_params
@@ -92,6 +111,73 @@ module Olivander
               end
             end
           end
+        end
+
+        def respond_with_error(resource, action)
+          return if response.body.present?
+
+          flash.delete(:success)
+          flash.now[:danger] ||= resource_flash(:danger, resource, action)
+
+          respond_to do |format|
+            case action_name.to_sym
+            when :create
+              format.html { render :new }
+            when :update
+              format.html { render :edit }
+            when :destroy
+              format.html do
+                redirect_flash
+                redirect_to(resource_redirect_path(resource, action))
+              end
+            else
+              if template_present?(action)
+                format.html { render(action, locals: { action: action }) }
+              elsif request.referer.to_s.end_with?('/edit')
+                format.html { render :edit }
+              elsif request.referer.to_s.end_with?('/new')
+                format.html { render :new }
+              else
+                format.html do
+                  redirect_flash
+                  redirect_to(resource_redirect_path(resource, action))
+                end
+              end
+            end
+
+            format.js do
+              view = template_present?(action) ? action : :member_action
+              render(view, locals: { action: action }) # action.js.erb
+            end
+
+            format.turbo_stream do
+            end
+          end
+        end
+
+        def date_params
+          []
+        end
+
+        def fix_date_params
+          recurse_and_fix_date_params(params)
+        end
+
+        def recurse_and_fix_date_params(params)
+          params.keys.each do |k|
+            if params[k].is_a? ActionController::Parameters
+              recurse_and_fix_date_params(params[k])
+            else
+              params[k] = rearrange_date_param(params[k]) if date_params.include?(k.to_sym)
+            end
+          end
+        end
+
+        def rearrange_date_param(value)
+          return nil if value.blank?
+
+          parts = value.split('/')
+          "#{parts[2]}-#{parts[0]}-#{parts[1]}"
         end
       end
     end

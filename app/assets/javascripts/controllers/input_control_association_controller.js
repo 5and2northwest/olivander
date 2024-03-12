@@ -15,7 +15,11 @@ export default class extends Controller {
           dataType: 'json',
           processResults: function(data) {
             return { results: data.map(function(map) {
-              return { id: map.id, text: map.text || map.name || map.description };
+              return {
+                id: map.id,
+                text: map.text || map.name || map.description,
+                children: map.children
+              };
             }) };
           }
         }

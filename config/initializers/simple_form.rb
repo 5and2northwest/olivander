@@ -125,7 +125,7 @@ SimpleForm.setup do |config|
     b.optional :min_max
     b.optional :readonly
     b.use :input, class: 'custom-control-input'
-    #b.use :label, class: 'custom-control-label'
+    b.use :label, class: 'custom-control-label'
     b.use :hint,  wrap_with: { tag: :span, class: :hint }
     b.use :error, wrap_with: { tag: :span, class: "text-danger" }
   end
