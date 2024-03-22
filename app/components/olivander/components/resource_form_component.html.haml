@@ -4,21 +4,13 @@
     .row
       - section.fields.each do |field|
         %div{ class: section.column_class }
-          - case field.type
-          - when :association, :belongs_to_association, :has_many_association, :has_many_through_association, :has_and_belongs_to_many_reflection, :has_one_through_association
-            - reflection = @f.object.class.reflect_on_association(field.sym)
-            - controllers = "#{field.type}-#{@resource.class.name.underscore.gsub('/', '_')}-#{field.sym} input-control-association"
-            - begin
-              - collection_path = polymorphic_path(@resource.class.reflect_on_association(field.sym).klass, format: :json)
-            - rescue
-              - collection_path = ''
-            - collection = @f.object.send(field.sym)
-            - case field.type
-            - when :has_one_through_association
-              = @f.input field.sym, selected: collection, collection: [collection].flatten, disabled: !field.editable, input_html: { data: { collection_path: collection_path, controller: controllers } }
-            -else
-              = @f.association field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: { collection_path: collection_path, controller: controllers } }
-          - when :boolean 
+          - if association?(field)
+            - collection = collection_for(field)
+            - if one_through?(field)
+              = @f.input        field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }, selected: collection
+            - else
+              = @f.association  field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }
+          - elsif boolean?(field)
             = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: { controller: "input-control-#{field.type}" } }, wrapper: :checkbox
           - else 
             = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { rows: 10, data: { controller: "input-control-#{field.type}" } }

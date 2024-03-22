@@ -92,8 +92,8 @@ module Olivander
                 render(action) # action.js.erb
               end
 
-              format.turbo_stream do
-              end
+              format.json { render json: resource }
+              format.turbo_stream {}
             end
           else # Default
             respond_to do |format|
@@ -107,8 +107,8 @@ module Olivander
                 render(:member_action, locals: { action: action })
               end
 
-              format.turbo_stream do
-              end
+              format.json { render json: resource }
+              format.turbo_stream {}
             end
           end
         end

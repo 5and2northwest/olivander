@@ -2,6 +2,8 @@
 - @resource = instance_variable_get('@' + resource.name) if resource.name
 
 - if @resource
+  = render_optional_partial 'form_before'
   .row
     .col-12{ data: { controller: [controller.class.name.gsub('Controller', '').underscore.dasherize.gsub('/', '--'), action_name].join('-') } }
       = render_resource_form(@resource)
+  = render_optional_partial 'form_after'

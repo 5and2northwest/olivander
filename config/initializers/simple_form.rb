@@ -205,7 +205,7 @@ SimpleForm.setup do |config|
   # config.wrapper_mappings = { string: :prepend }
   config.wrapper_mappings = {
     boolean:  :vertical_boolean,
-    check_boxes:     :check_box,
+    check_boxes:     :vertical_collection,
     # date:          :horizontal_multi_select,
     # datetime:      :horizontal_multi_select,
     # file:          :horizontal_file,
