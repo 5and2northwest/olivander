@@ -1,16 +1,17 @@
-- @resource.class.resource_field_groups.select{ |x| x.editable }.each do |rfg|
-  %h3= resource_field_group_label(@resource.class, rfg.key) unless rfg.key == :default
-  - rfg.sections.each do |section|
-    .row
-      - section.fields.each do |field|
-        %div{ class: section.column_class }
-          - if association?(field)
-            - collection = collection_for(field)
-            - if one_through?(field)
-              = @f.input        field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }, selected: collection
-            - else
-              = @f.association  field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }
-          - elsif boolean?(field)
-            = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: { controller: "input-control-#{field.type}" } }, wrapper: :checkbox
-          - else 
-            = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { rows: 10, data: { controller: "input-control-#{field.type}" } }
+%div{ data: { controller: "#{@resource.class.name.underscore.gsub('_', '-').gsub('/', '--')}-form" } }
+  - @resource.class.resource_field_groups.select{ |x| x.editable }.each do |rfg|
+    %h3= resource_field_group_label(@resource.class, rfg.key) unless rfg.key == :default
+    - rfg.sections.each do |section|
+      .row
+        - section.fields.each do |field|
+          %div{ class: section.column_class }
+            - if association?(field)
+              - collection = collection_for(field)
+              - if one_through?(field)
+                = @f.input        field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }, selected: collection
+              - else
+                = @f.association  field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }
+            - elsif boolean?(field)
+              = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: { controller: "input-control-#{field.type}" } }
+            - else 
+              = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { rows: 10, data: { controller: "input-control-#{field.type}" } }
