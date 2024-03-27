@@ -1,3 +1,3 @@
 module Olivander
-  VERSION = '0.2.0.9'.freeze
+  VERSION = '0.2.0.10'.freeze
 end

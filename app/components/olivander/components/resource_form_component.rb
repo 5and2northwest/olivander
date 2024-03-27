@@ -22,6 +22,12 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
     }
   end
 
+  def input_data_hash_for(field)
+    {
+      controller: "input-#{@resource.class.name.underscore.dasherize.gsub('/', '-')}-#{field.sym} input-control-#{field.type}",
+    }
+  end
+
   def taggable?(field)
     method_key = "#{field.sym}_taggable?"
     return false unless @resource.class.respond_to?(method_key)

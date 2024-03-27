@@ -23,6 +23,7 @@
  *= require 'adminlte/plugins/fontawesome-free/css/all.min'
  *= require 'adminlte/plugins/toastr/toastr.min.css'
  *= require 'adminlte/plugins/ekko-lightbox/ekko-lightbox.css'
+ *= require 'adminlte/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css'
  *= require effective_datatables
  *= require_tree .
  *= require_self
