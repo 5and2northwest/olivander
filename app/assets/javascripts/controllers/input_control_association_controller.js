@@ -9,6 +9,7 @@ export default class extends Controller {
     if (!$(el).hasClass("select2-hidden-accessible")) {
       $(el).select2({
         dropdownParent: $(el).parent(),
+        minimumInputLength: el.dataset.minimumInputLength || 0,
         tags: el.dataset.taggable == 'true',
         createTag: function (tag) {
           return {
@@ -20,8 +21,19 @@ export default class extends Controller {
         ajax: {
           url: el.dataset.collectionPath,
           delay: 250,
-          minimumInputLength: 2,
           dataType: 'json',
+          data: function(params) {
+            var hash = {
+              term: params.term,
+              _type: params._type,
+            }
+
+            if (el.dataset.tagParentId) {
+              hash[el.dataset.tagParentSearch] = el.dataset.tagParentId
+            }
+
+            return hash;
+          },
           processResults: function(data) {
             return { results: data.map(function(map) {
               return {
@@ -40,6 +52,7 @@ export default class extends Controller {
               data = new FormData()
           data.append("authenticity_token", document.querySelector('meta[name="csrf-token"]').content)
           data.append(el.dataset.tagFieldName, tag.text)
+          data.append(el.dataset.tagParentField, el.dataset.tagParentId)
           fetch(el.dataset.collectionPath, {
             method: 'POST',
             headers: {
