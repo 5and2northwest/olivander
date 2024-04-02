@@ -6,7 +6,7 @@ export default class extends Controller {
     var self = this,
         el = self.element;
 
-    if (!$(el).hasClass("select2-hidden-accessible")) {
+    if (el.dataset.forceSelect2 || !$(el).hasClass("select2-hidden-accessible")) {
       $(el).select2({
         dropdownParent: $(el).parent(),
         minimumInputLength: el.dataset.minimumInputLength || 0,
