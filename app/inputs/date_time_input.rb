@@ -6,13 +6,19 @@ class DateTimeInput < SimpleForm::Inputs::Base
 
     disabled = options[:disabled] || false
 
-    field = @builder.text_field(attribute_name, id: "#{attribute_name}_datetimepicker", class: 'form-control', value: raw_value, disabled: disabled, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker")
+    hash = { id: "#{attribute_name}_datetimepicker", class: 'form-control', value: raw_value, disabled: disabled, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker" }
+    data = options[:data]
+    data.keys.each do |d|
+      hash["data-#{d.to_s.dasherize}".to_sym] = data[d]
+    end
+    field = @builder.text_field(attribute_name, hash)
 
     add_on_class = options[:add_on_class] || "fa fa-calendar"
 
     add_on = template.content_tag(:div, class: "input-group-prepend") do
       add_on = template.content_tag(:div, class: "input-group-text") do
-        template.content_tag(:i, '', :class => add_on_class, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker")
+        hash = { class: add_on_class, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker" }
+        template.content_tag(:i, '', hash)
       end
     end
 

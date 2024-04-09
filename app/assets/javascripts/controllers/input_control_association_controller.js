@@ -11,6 +11,7 @@ export default class extends Controller {
         dropdownParent: $(el).parent(),
         minimumInputLength: el.dataset.minimumInputLength || 0,
         tags: el.dataset.taggable == 'true',
+        placeholder: el.dataset.placeholder || 'Select...',
         createTag: function (tag) {
           return {
               id: tag.term,

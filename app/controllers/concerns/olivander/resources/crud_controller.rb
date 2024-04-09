@@ -53,6 +53,24 @@ module Olivander
           end
         end
 
+        def show
+          Rails.logger.info 'Processed by Olivander::CrudController#show'
+
+          self.resource ||= resource_scope.find(params[:id])
+
+          EffectiveResources.authorize!(self, :show, resource)
+          @page_title ||= resource.to_s
+
+          run_callbacks(:resource_render)
+
+          respond_to do |format|
+            format.html { }
+            format.js { render('show', formats: :js) }
+            format.json { render json: resource }
+            format.turbo_stream {}
+          end
+        end
+
         def permitted_params
           params.fetch(resource_klass.name.underscore.gsub('/', '_').to_sym, {}).permit!
         end
@@ -79,6 +97,7 @@ module Olivander
                   )
                 end
               end
+              format.json { render json: resource }
             end
           elsif template_present?(action)
             respond_to do |format|
