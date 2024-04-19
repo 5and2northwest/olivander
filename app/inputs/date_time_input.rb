@@ -7,7 +7,7 @@ class DateTimeInput < SimpleForm::Inputs::Base
     disabled = options[:disabled] || false
 
     hash = { id: "#{attribute_name}_datetimepicker", class: 'form-control', value: raw_value, disabled: disabled, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker" }
-    data = options[:data]
+    data = options[:data] || {}
     data.keys.each do |d|
       hash["data-#{d.to_s.dasherize}".to_sym] = data[d]
     end
