@@ -84,7 +84,12 @@ module Olivander
               "<div class='image'><img  style='max-height: 25px; max-width: 25px' class='img-circle elevation-2' src='#{c.send(sym).expiring_url}'></div>".html_safe
             end
           else
-            col sym, visible: visible, label: label
+            reflection = instance.class.reflections[sym]
+            if reflection.present?
+              col sym, visible: visible, label: label, search: reflection.klass.all
+            else
+              col sym, visible: visible, label: label
+            end
           end
         end
         actions_col

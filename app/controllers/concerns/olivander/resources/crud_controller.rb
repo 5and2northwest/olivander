@@ -23,7 +23,7 @@ module Olivander
           if resources.order_values.size.zero? && resources.model.implicit_order_column.present?
             self.resources = resources.order(resources.model.implicit_order_column.to_sym)
           end
-          self.resources = self.resources.limit(25)
+          self.resources = self.resources.limit(200)
         end
 
         def index_param_search
