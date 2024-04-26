@@ -100,10 +100,12 @@
     -#     .dropdown-divider
     -#     %a.dropdown-item.dropdown-footer{:href => "#"} See All Notifications
     %li.nav-item.dropdown.user-menu
-      %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-        %img.user-image.img-circle.elevation-2{:alt => "User Image", :src => image_path(user_image_path(Olivander::CurrentContext.user))}/
-
-        %span.d-none.d-md-inline= Olivander::CurrentContext.user.display_name
+      - unless Olivander::CurrentContext.user.is_a?(OpenStruct)
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+          %img.user-image.img-circle.elevation-2{:alt => "User Image", :src => image_path(user_image_path(Olivander::CurrentContext.user))}/
+          %span.d-none.d-md-inline= Olivander::CurrentContext.user.display_name
+      - else
+        %a.nav-link.dropdown-toggle{href: "/users/sign_in"} Sign In
       %ul.dropdown-menu.dropdown-menu-lg.dropdown-menu-right
         / User image
         %li.user-header.bg-primary
