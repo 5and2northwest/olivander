@@ -3,7 +3,7 @@
   / Brand Logo
   %a.brand-link{ href: "/", class: sidebar_background_class }
     %img.brand-image.img-circle.elevation-3{:alt => Olivander::CurrentContext.application_context.logo.alt, :src => Olivander::CurrentContext.application_context.logo.url, :style => "opacity: .8"}/
-    %span.brand-text.font-weight-light= sidebar_context_name
+    %span.brand-text.font-weight-light{ title: sidebar_context_name }= sidebar_context_name.truncate(20, omission: '...')
   / Sidebar
   .sidebar
     / SidebarSearch Form
