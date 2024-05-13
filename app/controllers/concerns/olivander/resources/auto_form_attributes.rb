@@ -67,9 +67,9 @@ module Olivander
                          .filter{ |x| x.foreign_key == inc || x.name == inc }
                          .each do |r|
                 begin
-                  resource_field(r.name, r.association_class.name.demodulize.underscore.to_sym, editable: editable)
+                  resource_field(r.name, r.association_class.name.demodulize.underscore.to_sym, editable: editable && !r.options.keys.include?(:through))
                 rescue NotImplementedError
-                  resource_field(r.name, :association, editable: editable)
+                  resource_field(r.name, :association, editable: editable && !r.options.keys.include?(:through))
                 end
               end
 
