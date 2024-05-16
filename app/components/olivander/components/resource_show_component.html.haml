@@ -26,10 +26,11 @@
                 - when :association, :belongs_to_association, :has_many_association, :has_many_through_association, :has_and_belongs_to_many_reflection, :has_one_through_association
                   - if val.present?
                     - if val.is_a?(ActiveRecord::Associations::CollectionProxy)
-                      %ul
+                      %ul.no-bullets
                         - val.each do |val1|
                           - begin
-                            %li= link_to val1
+                            - link = link_to(val1)
+                            %li= link
                           - rescue 
                             %li= val1
                     - else
