@@ -1,0 +1,11 @@
+!!!
+%html
+  = render partial: 'layouts/olivander/adminlte/head'
+  %body
+    .wrapper
+      -# = render partial: @content_partial || 'layouts/olivander/adminlte/content', locals: { content: yield }
+      = yield
+      = turbo_frame_tag 'modal'
+      = render partial: 'layouts/olivander/adminlte/flashes'
+    = render_optional_partial 'layouts/olivander/adminlte/body_after'
+    = content_for :javascript
