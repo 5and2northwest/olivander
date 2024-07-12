@@ -1,10 +1,13 @@
+- if Olivander::CurrentContext.application_context.nav_container?
+  <div class='container'>
 / Navbar
-%nav.main-header.navbar.navbar-expand.navbar-white.navbar-light
+%nav.main-header.navbar{ class: Olivander::CurrentContext.application_context.nav_class }
   / Left navbar links
   %ul.navbar-nav
-    %li.nav-item
-      %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button", 'data-enable-remember': "true"}
-        %i.fas.fa-bars
+    - if Olivander::CurrentContext.application_context.sidebar?
+      %li.nav-item
+        %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button", 'data-enable-remember': "true"}
+          %i.fas.fa-bars
     - Olivander::CurrentContext.application_context.visible_modules.each do |menu_item|
       %li.nav-item.d-none.d-sm-inline-block
         = link_to menu_item.text, menu_item.href, class: 'nav-link'
@@ -124,3 +127,5 @@
     -# %li.nav-item
     -#   %a.nav-link{title: 'Show Sidebar Options', "data-controlsidebar-slide" => "true", "data-widget" => "control-sidebar", :href => "#", :role => "button"}
     -#     %i.fas.fa-th-large
+- if Olivander::CurrentContext.application_context.nav_container?
+  </div>

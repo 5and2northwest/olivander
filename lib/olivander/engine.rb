@@ -4,7 +4,9 @@ module Olivander
 
     initializer "olivander.assets.precompile" do |app|
       app.config.assets.precompile += %w[
-        adminlte.js datatable_index_charts_controller.js
+        adminlte.js
+        auto_select2.js
+        datatable_index_charts_controller.js
         datatable_expandable_chart_controller.js
         turbo_flash_controller.js
         modal_controller.js

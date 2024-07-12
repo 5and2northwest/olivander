@@ -2,13 +2,15 @@
 %html
   = render partial: 'layouts/olivander/adminlte/head'
   - sidebar_collapse = cookies['lte.pushmenu.collapsed'] == 'true' ? 'sidebar-collapse' : ''
-  %body.hold-transition.sidebar-mini.layout-fixed{ class: sidebar_collapse }
+  - layout_class = Olivander::CurrentContext.application_context.layout_class
+  %body{ class: [layout_class, sidebar_collapse].join(' ') }
     .wrapper
       / Preloader
       -# .preloader.flex-column.justify-content-center.align-items-center
       -#   %img.animation__shake{:alt => "FFES Logo", :height => "60", :src => image_path("logo.gif")}
       = render partial: 'layouts/olivander/adminlte/navbar'
-      = render partial: 'layouts/olivander/adminlte/sidebar'
+      - if Olivander::CurrentContext.application_context.sidebar?
+        = render partial: 'layouts/olivander/adminlte/sidebar'
       -# = render partial: 'layouts/olivander/adminlte/content'
       = render partial: @content_partial || 'layouts/olivander/adminlte/content', locals: { content: yield }
       = turbo_frame_tag 'modal'

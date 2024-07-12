@@ -1,4 +1,6 @@
 .content-wrapper
+  - if Olivander::CurrentContext.application_context.layout_container?
+    <div class='container'>
   %section.content-header
     .container-fluid
       .row.mb-2
@@ -10,3 +12,6 @@
   %section.content
     .container-fluid
       = content
+  - if Olivander::CurrentContext.application_context.layout_container?
+    </div>
+
