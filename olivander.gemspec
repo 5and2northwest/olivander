@@ -24,13 +24,15 @@ Gem::Specification.new do |spec|
     Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md', 'CHANGELOG.md']
   end
 
-  spec.add_dependency 'chartkick'
-  spec.add_dependency 'devise'
-  spec.add_dependency 'effective_datatables'
-  spec.add_dependency 'effective_resources'
+  spec.add_dependency 'chartkick', '5.0.5'
+  spec.add_dependency 'devise', '4.9.3'
+  spec.add_dependency 'effective_datatables', '4.24.1'
+  spec.add_dependency 'effective_resources', '2.19.8'
+  spec.add_dependency 'effective_bootstrap', '1.17.6'
   spec.add_dependency 'haml-rails', '~> 2.0'
-  spec.add_dependency 'net-http'
-  spec.add_dependency 'rails', '>= 3.2.0'
-  spec.add_dependency 'simple_form', '~> 5.1'
-  spec.add_dependency 'view_component'
+  spec.add_dependency 'net-http', '~> 0.4'
+  spec.add_dependency 'rails', '~> 7.0'
+  spec.add_dependency 'simple_form', '5.3.0'
+  spec.add_dependency 'view_component', '3.10.0'
+  spec.add_dependency 'ffi', '~> 1.16'
 end

@@ -11,12 +11,12 @@ gem "sprockets-rails"
 # Start debugger with binding.b [https://github.com/ruby/debug]
 # gem "debug", ">= 1.0.0"
 
-gem 'chartkick'
-gem 'devise'
-gem 'effective_datatables'
+gem 'chartkick', '~> 5.0'
+gem 'devise', '~> 4.9'
+gem 'effective_datatables', '~> 4.24'
 gem 'haml-rails', '~> 2.0'
 gem 'net-http'
-gem 'simple_form'
+gem 'simple_form', '~> 5.1'
 gem 'view_component'
 
 group :development do
