@@ -69,7 +69,10 @@ module Olivander
           label = field_label_for(klazz, key)
           sym = key.gsub('_id', '')
           visible = show.include?(key) || !(default_hidden.include?(key) || hide.include?(key))
-          if %w[id name first_name last_name display_name title].include?(sym)
+          already_implemented_method = "col_for_#{sym}"
+          if datatable.respond_to?(already_implemented_method)
+            datatable.send(already_implemented_method, visible: visible)
+          elsif %w[id name first_name last_name display_name title].include?(sym)
             col sym, visible: visible, action: :show
           elsif sym.include?('.')
             col sym, visible: visible, label: label
