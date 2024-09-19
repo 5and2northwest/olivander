@@ -1,12 +1,10 @@
 class DateTimeInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
-    date_format = options[:date_format] || '%m/%d/%Y'
-    raw_value = object.public_send(attribute_name)
-    raw_value = raw_value.strftime(date_format) if raw_value.present?
+    raw_value = parse_value(object.public_send(attribute_name), options[:date_format])
 
     disabled = options[:disabled] || false
 
-    hash = { id: "#{attribute_name}_datetimepicker", class: 'form-control', value: raw_value, disabled: disabled, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker" }
+    hash = { id: "#{attribute_name}_datetimepicker", class: 'form-control datetimepicker-input', value: raw_value, disabled: disabled, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker" }
     data = options[:data] || {}
     data.keys.each do |d|
       hash["data-#{d.to_s.dasherize}".to_sym] = data[d]
@@ -26,7 +24,7 @@ class DateTimeInput < SimpleForm::Inputs::Base
 
     script = "".html_safe
     unless disabled then
-      picker_options = options[:picker_options] || { "format" => "MM/DD/YYYY" }
+      picker_options = options[:picker_options] || { "format": "MM/DD/YYYY" }
 
       script = """
         <script>
@@ -40,5 +38,17 @@ class DateTimeInput < SimpleForm::Inputs::Base
     end
 
     all + script
+  end
+
+  def parse_value(raw_value, format)
+    return nil unless raw_value.present?
+
+    format ||=  case raw_value.class.name
+                when 'Time', 'ActiveSupport::TimeWithZone'
+                  '%m/%d/%Y %H:%M %p'
+                else
+                  '%m/%d/%Y'
+                end
+    raw_value.strftime(format)
   end
 end

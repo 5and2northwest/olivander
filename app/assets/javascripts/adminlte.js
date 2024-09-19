@@ -4,6 +4,7 @@
 //= require "adminlte/plugins/jquery-ui/jquery-ui.min.js"
 //= require "adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"
 //= require "adminlte/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"
+//= require "adminlte/plugins/bootstrap-switch/js/bootstrap-switch.min.js"
 //= require "adminlte/plugins/sparklines/sparkline.js"
 //= require "adminlte/plugins/jqvmap/jquery.vmap.min.js"
 //= require "adminlte/plugins/jqvmap/maps/jquery.vmap.usa.js"

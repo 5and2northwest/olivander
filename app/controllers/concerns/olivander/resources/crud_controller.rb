@@ -195,8 +195,10 @@ module Olivander
         def rearrange_date_param(value)
           return nil if value.blank?
 
-          parts = value.split('/')
-          "#{parts[2]}-#{parts[0]}-#{parts[1]}"
+          datetime_parts = value.split(' ')
+          date_parts = datetime_parts.first.split('/')
+          datetime_parts[0] = "#{date_parts[2]}-#{date_parts[0]}-#{date_parts[1]}"
+          datetime_parts.join(' ')
         end
       end
     end

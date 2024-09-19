@@ -14,4 +14,4 @@
             - elsif boolean?(field)
               = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: input_data_hash_for(field) }
             - else 
-              = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { rows: 10, data: input_data_hash_for(field) }
+              = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, picker_options: input_picker_options_for(field), input_html: { rows: 10, data: input_data_hash_for(field) }

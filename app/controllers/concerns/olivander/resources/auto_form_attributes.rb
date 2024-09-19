@@ -66,10 +66,11 @@ module Olivander
               reflections.map{ |x| x[1] }
                          .filter{ |x| x.foreign_key == inc || x.name == inc }
                          .each do |r|
+                type = r.association_class.name.demodulize.underscore.to_sym
                 begin
-                  resource_field(r.name, r.association_class.name.demodulize.underscore.to_sym, editable: editable && !r.options.keys.include?(:through))
+                  resource_field(r.name, type, editable: editable && !uneditable_association?(r, type))
                 rescue NotImplementedError
-                  resource_field(r.name, :association, editable: editable && !r.options.keys.include?(:through))
+                  resource_field(r.name, :association, editable: editable && !uneditable_association?(r, type))
                 end
               end
 
@@ -80,6 +81,13 @@ module Olivander
               end
             end
           end
+        end
+
+        def self.uneditable_association?(r, type)
+          return false unless r.options.keys.include?(:through)
+
+          # this collection may prove to be larger than one...
+          %i[has_one_through_association].include?(type)
         end
 
         def self.resource_field_group(key = :default, editable: true, &block)

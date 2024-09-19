@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# needed for gem
 module Olivander
-  VERSION = '0.2.0.27'.freeze
+  VERSION = '0.2.0.32'
 end

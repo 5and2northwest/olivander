@@ -19,7 +19,12 @@
                 - when :integer, :float
                   = val
                 - when :string, :text
-                  = simple_format(val)
+                  - if f.sym.to_s.ends_with?('_url', '_link')
+                    = link_to val, val, target: f.sym
+                  - elsif @resource.respond_to?("#{f.sym}_as_html?") && @resource.send("#{f.sym}_as_html?")
+                    = raw(val)
+                  - else
+                    = simple_format(val)
                 - when :boolean
                   - icon_class = val ? 'fa-check text-success' : 'fa-times text-danger'
                   %i.fa{ class: icon_class }

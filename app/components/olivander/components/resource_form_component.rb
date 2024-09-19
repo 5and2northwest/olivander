@@ -28,6 +28,17 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
     }
   end
 
+  def input_picker_options_for(field)
+    case field.type
+    when :datetime
+      { icons: { time: 'far fa-clock' } }
+    when :date
+      { 'format': 'MM/DD/YYYY' }
+    else
+      {}
+    end
+  end
+
   def taggable?(field)
     method_key = "#{field.sym}_taggable?"
     return false unless @resource.class.respond_to?(method_key)
