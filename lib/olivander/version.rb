@@ -2,5 +2,5 @@
 
 # needed for gem
 module Olivander
-  VERSION = '0.2.0.35'
+  VERSION = '0.2.0.36'
 end

@@ -36,8 +36,9 @@ module Olivander
     end
 
     def authorized_resource_actions(resource, for_action: :show)
+      action_klass = action_klass_for(resource)
       action_resource = action_resource_for(resource)
-      raw_name = action_resource.name
+      raw_name = action_klass.name
       plural_name = raw_name.demodulize.underscore.pluralize
       routed_resource = Olivander::CurrentContext.application_context.route_builder.resources[plural_name.to_sym]
       return [] if routed_resource.nil?
@@ -63,9 +64,13 @@ module Olivander
       end
     end
 
-    def action_resource_for(resource)
+    def action_klass_for(resource)
       klazz = resource.is_a?(Class) ? resource : resource.class
-      klazz.respond_to?(:action_resource) ? klazz.action_resource : klazz
+      klazz.respond_to?(:action_klass) ? klazz.action_klass : klazz
+    end
+
+    def action_resource_for(resource)
+      resource.respond_to?(:action_resource) ? resource.action_resource : resource
     end
 
     def authorized_resource_action?(action, resource, except = nil)
