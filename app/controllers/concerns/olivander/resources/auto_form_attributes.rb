@@ -66,8 +66,8 @@ module Olivander
               reflections.map{ |x| x[1] }
                          .filter{ |x| x.foreign_key == inc || x.name == inc }
                          .each do |r|
-                type = r.association_class.name.demodulize.underscore.to_sym
                 begin
+                  type = r.association_class.name.demodulize.underscore.to_sym
                   resource_field(r.name, type, editable: editable && !uneditable_association?(r, type))
                 rescue NotImplementedError
                   resource_field(r.name, :association, editable: editable && !uneditable_association?(r, type))

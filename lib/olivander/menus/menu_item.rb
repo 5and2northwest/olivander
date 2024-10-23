@@ -77,9 +77,9 @@ module Olivander
         return nil unless raw
 
         if key && I18n.exists?(key)
-          I18n.t(key)
+          O18n.t(key)
         elsif fallback && I18n.exists?(fallback)
-          I18n.t(fallback)
+          O18n.t(fallback)
         else
           raw.titleize
         end
@@ -88,12 +88,12 @@ module Olivander
 
     class Badge
       attr_accessor :text, :badge_class
-  
+
       def initialize(text = nil, badge_class = nil)
         @text = text
         @badge_class = badge_class
       end
-  
+
       def with_proc
         yield(self)
         self

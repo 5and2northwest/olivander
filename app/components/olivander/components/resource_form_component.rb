@@ -2,6 +2,7 @@
 
 class Olivander::Components::ResourceFormComponent < ViewComponent::Base
   delegate :resource_field_group_label, to: :helpers
+  delegate :field_label_for, to: :helpers
 
   def initialize(resource, form_builder)
     @resource = resource
@@ -16,7 +17,8 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
   def association_data_hash_for(field)
     {
       collection_path: collection_path_for(field),
-      controller: "association-#{@resource.class.name.underscore.dasherize.gsub('/', '-')}-#{field.sym} input-control-association",
+      controller: "association-#{@resource.class.name.underscore.dasherize.gsub('/',
+                                                                                '-')}-#{field.sym} input-control-association",
       taggable: taggable?(field),
       tag_field_name: tag_field_name(field)
     }
@@ -24,7 +26,8 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
 
   def input_data_hash_for(field)
     {
-      controller: "input-#{@resource.class.name.underscore.dasherize.gsub('/', '-')}-#{field.sym} input-control-#{field.type}",
+      controller: "input-#{@resource.class.name.underscore.dasherize.gsub('/',
+                                                                          '-')}-#{field.sym} input-control-#{field.type}"
     }
   end
 
@@ -53,11 +56,9 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
   end
 
   def collection_path_for(field)
-    begin
-      polymorphic_path(@resource.class.reflect_on_association(field.sym).klass, format: :json)
-    rescue
-      ''
-    end
+    polymorphic_path(@resource.class.reflect_on_association(field.sym).klass, format: :json)
+  rescue StandardError
+    ''
   end
 
   def association?(field)

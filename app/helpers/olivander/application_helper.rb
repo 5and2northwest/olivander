@@ -2,15 +2,16 @@ module Olivander
   module ApplicationHelper
     def chart_column_class_num(label, count, min)
       return "col-#{label}-#{min}" if count >= 12
+
       modded = count % 12
       divisor = modded.zero? ? 1 : modded
-      "col-#{label}-#{[12/divisor, min].max}"
-  
+      "col-#{label}-#{[12 / divisor, min].max}"
+
       divisor = count
-      result = 12/divisor
+      result = 12 / divisor
       while result < min
-        divisor = divisor/2
-        result = 12/divisor
+        divisor /= 2
+        result = 12 / divisor
       end
       "col-#{label}-#{result}"
     end
@@ -21,7 +22,7 @@ module Olivander
 
       controller_key = controller.class.name.underscore
       key = "page_titles.#{controller_key}.#{action_name}"
-      return I18n.t(key) if I18n.exists?(key)
+      return O18n.t(key) if I18n.exists?(key)
 
       return @page_title if @page_title
 
@@ -35,21 +36,20 @@ module Olivander
     end
 
     def authorized_resource_actions(resource, for_action: :show)
-      raw_name = resource.is_a?(Class) ? resource.name : resource.class.name
+      action_resource = action_resource_for(resource)
+      raw_name = action_resource.name
       plural_name = raw_name.demodulize.underscore.pluralize
       routed_resource = Olivander::CurrentContext.application_context.route_builder.resources[plural_name.to_sym]
       return [] if routed_resource.nil?
 
       actions = if resource.is_a?(Class)
                   routed_resource.unpersisted_crud_actions | routed_resource.collection_actions.reject(&:crud_action)
+                elsif resource.persisted?
+                  routed_resource.persisted_crud_actions | routed_resource.member_actions.reject(&:crud_action)
                 else
-                  if resource.persisted?
-                    routed_resource.persisted_crud_actions | routed_resource.member_actions.reject(&:crud_action)
-                  else
-                    []
-                  end
+                  []
                 end
-      actions = actions.select{ |a| authorized_resource_action?(a.sym, resource, for_action) }
+      actions = actions.select { |a| authorized_resource_action?(a.sym, action_resource, for_action) }
       preferred = %i[show edit destroy]
       [].tap do |arr|
         preferred.each do |p|
@@ -57,10 +57,15 @@ module Olivander
             arr << a if a.sym == p
           end
         end
-        actions.reject{ |x| preferred.include?(x.sym) }.each do |a|
+        actions.reject { |x| preferred.include?(x.sym) }.each do |a|
           arr << a
         end
       end
+    end
+
+    def action_resource_for(resource)
+      klazz = resource.is_a?(Class) ? resource : resource.class
+      klazz.respond_to?(:action_resource) ? klazz.action_resource : klazz
     end
 
     def authorized_resource_action?(action, resource, except = nil)
@@ -70,36 +75,41 @@ module Olivander
     end
 
     def resource_form_actions(resource, for_action: :show)
-      render partial: 'resource_form_actions', locals: { actions: authorized_resource_actions(resource, for_action: for_action).select(&:show_in_form) }
+      render partial: 'resource_form_actions',
+             locals: { actions: authorized_resource_actions(resource, for_action: for_action).select(&:show_in_form) }
     end
 
     def resource_form_action_tooltip(resource, action)
       key = resource.class.name.underscore
-      return I18n.t("activerecord.actions.#{key}.#{action}-tooltip") if I18n.exists?("activerecord.actions.#{key}.#{action}-tooltip")
-      return I18n.t("activerecord.actions.#{action}-tooltip") if I18n.exists?("activerecord.actions.#{action}-tooltip")
+      if I18n.exists?("activerecord.actions.#{key}.#{action}-tooltip")
+        return O18n.t("activerecord.actions.#{key}.#{action}-tooltip")
+      end
+      return O18n.t("activerecord.actions.#{action}-tooltip") if I18n.exists?("activerecord.actions.#{action}-tooltip")
 
       action.to_s.titleize
     end
 
     def resource_form_action_label(resource, action)
       key = resource.class.name.underscore
-      return I18n.t("activerecord.actions.#{key}.#{action}") if I18n.exists?("activerecord.actions.#{key}.#{action}")
-      return I18n.t("activerecord.actions.#{action}") if I18n.exists?("activerecord.actions.#{action}")
+      return O18n.t("activerecord.actions.#{key}.#{action}") if I18n.exists?("activerecord.actions.#{key}.#{action}")
+      return O18n.t("activerecord.actions.#{action}") if I18n.exists?("activerecord.actions.#{action}")
 
       action.to_s.titleize
     end
 
     def resource_form_action_icon(resource, action)
       key = resource.class.name.underscore
-      return I18n.t("activerecord.actions.#{key}.#{action}-icon") if I18n.exists?("activerecord.actions.#{key}.#{action}-icon")
-      return I18n.t("activerecord.actions.#{action}-icon") if I18n.exists?("activerecord.actions.#{action}-icon")
+      if I18n.exists?("activerecord.actions.#{key}.#{action}-icon")
+        return O18n.t("activerecord.actions.#{key}.#{action}-icon")
+      end
+      return O18n.t("activerecord.actions.#{action}-icon") if I18n.exists?("activerecord.actions.#{action}-icon")
 
       action.to_s.titleize
     end
 
     def resource_field_group_label(resource_class, key)
       i18n_key = "activerecord.attributes.#{resource_class.name.underscore}.resource_field_groups.#{key}"
-      I18n.exists?(i18n_key) ? I18n.t(i18n_key) : key.to_s.titleize
+      I18n.exists?(i18n_key) ? O18n.t(i18n_key) : key.to_s.titleize
     end
 
     def current_user
@@ -111,7 +121,7 @@ module Olivander
     end
 
     def resource_attributes(resource, effective_resource)
-      er_attributes = effective_resource&.model_attributes&.collect{ |x| x[0] }
+      er_attributes = effective_resource&.model_attributes&.collect { |x| x[0] }
       return er_attributes if er_attributes.present? && er_attributes.size.positive?
 
       resource.auto_form_attributes
@@ -119,7 +129,6 @@ module Olivander
 
     def render_optional_partial(partial, locals: {})
       render partial: partial, locals: locals
-
     rescue ActionView::MissingTemplate
       Rails.logger.debug "did not find partial: #{partial}"
       nil
@@ -128,7 +137,7 @@ module Olivander
     def field_label_for(resource_class, sym)
       sym_s = sym.to_s.gsub('.', '_')
       i18n_key = "activerecord.attributes.#{resource_class.name.underscore}.#{sym_s}"
-      return I18n.t(i18n_key) if I18n.exists?(i18n_key)
+      return O18n.t(i18n_key) if I18n.exists?(i18n_key)
 
       sym.to_s.titleize
     end
@@ -138,7 +147,9 @@ module Olivander
     end
 
     def sidebar_context_name
-      [Olivander::CurrentContext.application_context.name, sidebar_context_suffix&.upcase].reject{ |x| x.blank? or x == 'PRODUCTION' }.join(' ')
+      [Olivander::CurrentContext.application_context.name, sidebar_context_suffix&.upcase].reject do |x|
+        x.blank? or x == 'PRODUCTION'
+      end.join(' ')
     end
 
     def sidebar_context_suffix
@@ -166,31 +177,31 @@ module Olivander
       favicon_link_tag(image_path(favicon_path))
     end
 
-    def flash_class key
+    def flash_class(key)
       case key
-      when "error"
-        "danger"
-      when "notice"
-        "info"
-      when "alert"
-        "danger"
+      when 'error'
+        'danger'
+      when 'notice'
+        'info'
+      when 'alert'
+        'danger'
       else
         key
       end
     end
 
-    def flash_icon key
+    def flash_icon(key)
       case key
-      when "error"
-        "fas fa-exclamation-circle"
-      when "notice"
-        "fas fa-info-circle"
-      when "alert"
-        "fas fa-info-circle"
-      when "success"
-        "fas fa-check-circle"
+      when 'error'
+        'fas fa-exclamation-circle'
+      when 'notice'
+        'fas fa-info-circle'
+      when 'alert'
+        'fas fa-info-circle'
+      when 'success'
+        'fas fa-check-circle'
       else
-        "fas fa-question-circle"
+        'fas fa-question-circle'
       end
     end
 
@@ -209,7 +220,7 @@ module Olivander
             builder.footer_buttons.call
           end
         end
-      end 
+      end
     end
   end
 end

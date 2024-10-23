@@ -4,14 +4,15 @@
     - rfg.sections.each do |section|
       .row
         - section.fields.each do |field|
+          - label = field_label_for(@resource.class, field.sym)
           %div{ class: section.column_class }
             - if association?(field)
               - collection = collection_for(field)
               - if one_through?(field)
-                = @f.input        field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }, selected: collection
+                = @f.input        field.sym, label: label, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }, selected: collection
               - else
-                = @f.association  field.sym, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }
+                = @f.association  field.sym, label: label, collection: [collection].flatten, disabled: !field.editable, input_html: { data: association_data_hash_for(field) }
             - elsif boolean?(field)
-              = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, input_html: { data: input_data_hash_for(field) }
+              = @f.input field.sym, label: label, disabled: !field.editable, as: field.type.to_sym, input_html: { data: input_data_hash_for(field) }
             - else 
-              = @f.input field.sym, disabled: !field.editable, as: field.type.to_sym, picker_options: input_picker_options_for(field), input_html: { rows: 10, data: input_data_hash_for(field) }
+              = @f.input field.sym, label: label, disabled: !field.editable, as: field.type.to_sym, picker_options: input_picker_options_for(field), input_html: { rows: 10, data: input_data_hash_for(field) }

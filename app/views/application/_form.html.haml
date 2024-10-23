@@ -12,6 +12,6 @@
       = render Olivander::Components::ResourceFormComponent.new(@resource, f)
       = render_optional_partial 'form_inside_after', locals: {f: f}
     .card-footer.text-right
-      = link_to 'Cancel', @_effective_resource.action_path(:index), class: 'btn btn-secondary'
+      = link_to 'Cancel', @cancel_path || @_effective_resource.action_path(:index), class: 'btn btn-secondary'
       - unless read_only
         = f.button :submit, class: 'btn btn-primary'

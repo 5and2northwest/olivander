@@ -48,7 +48,7 @@ module Olivander
 
       def confirmation_message
         return confirm_with if confirm_with.present?
-        return I18n.t('activerecord.actions.delete-confirmation') if verb == :delete
+        return O18n.t('activerecord.actions.delete-confirmation') if verb == :delete
 
         nil
       end

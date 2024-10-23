@@ -6,13 +6,13 @@ class O18n
 
   def self.t(*args, **kwargs)
     value = I18n.t(*args, **kwargs)
-    value.gsub(ENV_REGEX) {
-      envar = ENV[$1]
-      unless envar.blank?
-        I18n.exists?(envar) ? I18n.t(envar) : envar
+    value.gsub(ENV_REGEX) do
+      envar = ENV[Regexp.last_match(1)]
+      if envar.blank?
+        Regexp.last_match(1).titleize
       else
-        $1.titleize
+        I18n.exists?(envar) ? I18n.t(envar) : envar
       end
-    }
+    end
   end
 end
