@@ -29,6 +29,9 @@
   $(document).ready(function(e) {
     return destroySelect2s();
   });
+  $(document).on('page:change', function() {
+    return destroySelect2s();
+  });
 
   // $(document).ready(function(e) {
   //   return $('.effective-datatables-filters input').click(function() {

@@ -24,3 +24,17 @@
 //= require 'olivander/flash_toast'
 //= require "effective_datatables"
 //= require "adminlte/datatable.fix.js"
+
+$(document).ready(function(e) {
+  var popperTexts = document.querySelectorAll('[data-popper-text]')
+  popperTexts.forEach(function(el, idx) {
+    var label = document.querySelector(`[for='${el.id}']`)
+    label.innerHTML = label.innerHTML + `&nbsp;`
+    var helpCircle = document.createElement('i')
+    helpCircle.classList.add('fa', 'fa-question-circle', 'text-primary')
+    helpCircle.addEventListener('click', function(evt) {
+      Swal.fire(el.dataset.popperText)
+    })
+    label.appendChild(helpCircle)
+  })
+})

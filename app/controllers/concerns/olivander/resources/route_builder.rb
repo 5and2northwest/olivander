@@ -14,15 +14,21 @@ module Olivander
         self.confirm = kwargs[:confirm] || false
         self.turbo_frame = kwargs[:turbo_frame]
         self.turbo = kwargs[:turbo] == true ? true : !turbo_frame.blank?
-        self.collection = kwargs[:collection] || false
-        self.crud_action = kwargs[:crud_action] || false
-        self.show_in_form = kwargs[:show_in_form] || true
-        self.show_in_datatable = kwargs[:show_in_datatable] || true
-        self.no_route = kwargs[:no_route] || false
+        self.collection = default_if_not_present(kwargs[:collection], false)
+        self.crud_action = default_if_not_present(kwargs[:crud_action], false)
+        self.show_in_form = default_if_not_present(kwargs[:show_in_form], true)
+        self.show_in_datatable = default_if_not_present(kwargs[:show_in_datatable], true)
+        self.no_route = default_if_not_present(kwargs[:no_route], false)
         self.path_helper = kwargs[:path_helper]
         self.confirm_with = kwargs[:confirm_with]
         self.primary = kwargs[:primary] || crud_action
         self.html_attributes = kwargs[:html_attributes]
+      end
+
+      def default_if_not_present(value, default)
+        return value unless value.nil?
+
+        default
       end
 
       def args_hash(options = nil)
@@ -137,7 +143,7 @@ module Olivander
         def action(sym, **kwargs)
           raise 'Must be invoked in a resource block' unless current_resource.present?
 
-          controller ||= current_resource.model
+          kwargs[:controller] ||= current_resource.model
           current_resource.actions << ResourceAction.new(sym, **kwargs)
         end
 

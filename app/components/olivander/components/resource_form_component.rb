@@ -14,6 +14,13 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
     @f.object.send(field.sym)
   end
 
+  def label_data_hash_for(field)
+    help_text_key = ['activerecord.attributes', @resource.class.name.underscore, "#{field.sym}_help_text"].join('.')
+    {}.tap do |hash|
+      hash[:popper_text] = O18n.t(help_text_key) if I18n.exists?(help_text_key)
+    end
+  end
+
   def association_data_hash_for(field)
     {
       collection_path: collection_path_for(field),
@@ -21,14 +28,14 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
                                                                                 '-')}-#{field.sym} input-control-association",
       taggable: taggable?(field),
       tag_field_name: tag_field_name(field)
-    }
+    }.merge(label_data_hash_for(field))
   end
 
   def input_data_hash_for(field)
     {
       controller: "input-#{@resource.class.name.underscore.dasherize.gsub('/',
                                                                           '-')}-#{field.sym} input-control-#{field.type}"
-    }
+    }.merge(label_data_hash_for(field))
   end
 
   def input_picker_options_for(field)

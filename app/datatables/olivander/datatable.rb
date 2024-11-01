@@ -19,7 +19,7 @@ module Olivander
       Rails.logger.debug "initializing datatable for #{klazz}"
 
       instance = klazz.new
-      klazz_attributes = instance.attributes.collect{ |x| x[0] }
+      klazz_attributes = instance.attributes.collect { |x| x[0] }
       column_attributes = klazz_attributes
       column_attributes &&= only if only.size.positive?
       column_attributes -= except if except.size.positive?
@@ -64,7 +64,7 @@ module Olivander
         order(order_by[0], order_by[1]) if order_by.size == 2
         # bulk_actions_col if datatable._bulk_actions.size.positive?
 
-        #TODO: use columns from model here instead of attributes keys
+        # TODO: use columns from model here instead of attributes keys
         column_attributes.each do |key|
           label = field_label_for(klazz, key)
           sym = key.gsub('_id', '')
@@ -76,7 +76,7 @@ module Olivander
             col sym, visible: visible, action: :show
           elsif sym.include?('.')
             col sym, visible: visible, label: label
-          elsif klazz.columns.select{ |x| x.name == key }.first&.type == :boolean
+          elsif klazz.columns.select { |x| x.name == key }.first&.type == :boolean
             col sym, visible: visible, label: label do |c|
               val = c.send(sym)
               icon_class = val ? 'fa-check text-success' : 'fa-times text-danger'
