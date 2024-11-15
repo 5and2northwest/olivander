@@ -14,7 +14,11 @@
   });
 
   destroySelect2s = function() {
-    $('.effective-datatables-filters').find('select').select2('destroy');
+    try {
+      $('.effective-datatables-filters').find('select.select2').select2('destroy');
+    } catch (error) {
+      console.log(error)
+    }
     return $('.dataTables_wrapper').each(function(_, o) {
       try {
         return $(o).find('.dataTables_length select.select2-hidden-accessible').addClass('no-select2').removeAttr('name').select2('destroy');
