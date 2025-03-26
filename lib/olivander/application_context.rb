@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module Olivander
+  # DTO to represent the overall application context
   class ApplicationContext
     attr_accessor :name, :logo, :login_logo, :company, :menu_items,
                   :route_builder, :sign_out_path, :sidebar_background_class,
                   :nav_container, :nav_class, :layout_container, :layout_class,
-                  :sidebar
+                  :sidebar, :back_to_top
 
     DEFAULT_APPLICATION_NAME  = 'Application Name'.freeze
     DEFAULT_SIGN_OUT_PATH     = '/users/sign_out'.freeze
@@ -28,12 +31,16 @@ module Olivander
       self.nav_class = kwargs[:nav_class] || DEFAULT_NAV_CLASS
       self.layout_container = kwargs[:layout_container] || 'false'.freeze == 'true'.freeze
       self.layout_class = kwargs[:layout_class] || DEFAULT_LAYOUT_CLASS
-      self.sidebar = kwargs[:sidebar] || 'true' == 'true'.freeze
+      self.back_to_top = (kwargs[:back_to_top] || true)
       begin
         self.route_builder = RouteBuilder.new
       rescue NameError
         self.route_builder = OpenStruct.new(resources: {})
       end
+    end
+
+    def back_to_top?
+      back_to_top.to_s == 'true'
     end
 
     def nav_container?
@@ -65,6 +72,7 @@ module Olivander
       end
     end
 
+    # DTO for the current application logo
     class Logo
       attr_accessor :url, :alt
 
@@ -74,6 +82,7 @@ module Olivander
       end
     end
 
+    # DTO for the current login logo
     class LoginLogo
       attr_accessor :url, :alt
 
@@ -83,6 +92,7 @@ module Olivander
       end
     end
 
+    # DTO for information about the Company for which this app is deployed
     class Company
       attr_accessor :name, :url
 
@@ -93,6 +103,7 @@ module Olivander
     end
   end
 
+  # DTO for state in the current thread of execution
   class CurrentContext < ActiveSupport::CurrentAttributes
     attribute :application_context
     attribute :user, :ability

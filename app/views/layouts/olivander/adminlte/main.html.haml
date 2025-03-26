@@ -9,6 +9,9 @@
       -# .preloader.flex-column.justify-content-center.align-items-center
       -#   %img.animation__shake{:alt => "FFES Logo", :height => "60", :src => image_path("logo.gif")}
       = render partial: 'layouts/olivander/adminlte/navbar'
+      - if Olivander::CurrentContext.application_context.back_to_top?
+        %a.btn.btn-secondary.btn-lg#back-to-top{ href: '#' }
+          %i.fa.fa-arrow-up
       - if Olivander::CurrentContext.application_context.sidebar?
         = render partial: 'layouts/olivander/adminlte/sidebar'
       -# = render partial: 'layouts/olivander/adminlte/content'
