@@ -29,7 +29,7 @@ module Olivander
         def index_param_search
           params.each do |param|
             effective_resource.klass.columns.each do |col|
-              next unless col.name == param[0] #&& !param[1].blank?
+              next unless col.name == param[0] # && !param[1].blank?
 
               self.resources = self.resources.where(param[0].to_sym => param[1])
             end
@@ -42,10 +42,10 @@ module Olivander
           else
             k = resources.klass
             self.resources = k.all
-            fields = %w[name title description text].keep_if{ |field| k.respond_to?(field) }
+            fields = %w[name title description text].keep_if { |field| k.respond_to?(field) }
             unless params[:term].blank?
               like_term = "%#{ActiveRecord::Base.sanitize_sql_like(params[:term])}%"
-              clauses = fields.map{ |field| "#{field} ilike '#{like_term}'" }.join(' or ')
+              clauses = fields.map { |field| "#{field} ilike '#{like_term}'" }.join(' or ')
             end
             orders = fields.join(', ')
             self.resources = self.resources.where(clauses) if clauses.present? && clauses.length.positive?
@@ -64,7 +64,7 @@ module Olivander
           run_callbacks(:resource_render)
 
           respond_to do |format|
-            format.html { }
+            format.html {}
             format.js { render('show', formats: :js) }
             format.json { render json: resource }
             format.turbo_stream {}
@@ -76,7 +76,7 @@ module Olivander
         end
 
         def respond_with_success(resource, action)
-          return if (response.body.respond_to?(:length) && response.body.length > 0)
+          return if response.body.respond_to?(:length) && response.body.length > 0
 
           if specific_redirect_path?(action)
             respond_to do |format|
@@ -93,7 +93,7 @@ module Olivander
                 else
                   render(
                     (template_present?(action) ? action : :member_action),
-                    locals: { action: action, remote_form_redirect: resource_redirect_path(resource, action)}
+                    locals: { action: action, remote_form_redirect: resource_redirect_path(resource, action) }
                   )
                 end
               end
@@ -127,7 +127,9 @@ module Olivander
               end
 
               format.json { render json: resource }
-              format.turbo_stream {}
+              format.turbo_stream do
+                flash.now[:success] ||= resource_flash(:success, resource, action)
+              end
             end
           end
         end
@@ -186,8 +188,8 @@ module Olivander
           params.keys.each do |k|
             if params[k].is_a? ActionController::Parameters
               recurse_and_fix_date_params(params[k])
-            else
-              params[k] = rearrange_date_param(params[k]) if date_params.include?(k.to_sym)
+            elsif date_params.include?(k.to_sym)
+              params[k] = rearrange_date_param(params[k])
             end
           end
         end
