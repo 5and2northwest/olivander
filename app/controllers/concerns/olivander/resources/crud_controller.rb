@@ -112,7 +112,9 @@ module Olivander
               end
 
               format.json { render json: resource }
-              format.turbo_stream {}
+              format.turbo_stream do
+                flash.now[:success] ||= resource_flash(:success, resource, action)
+              end
             end
           else # Default
             respond_to do |format|
