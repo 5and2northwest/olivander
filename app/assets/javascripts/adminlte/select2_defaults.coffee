@@ -23,8 +23,10 @@ initSelect2s = () -> $('select').not('.no-select2').each (k,v) =>
 
 # $(document).ready -> initSelect2s()
 $(document).on 'show.bs.modal', (e) =>
-  $('select').not('.no-select2').each (k,v) =>
-    $(v).select2({ dropdownParent: $(v).parent() })
+  $('select').not('.no-select2').each (k, v) ->
+    $v = $(v)
+    unless $v.hasClass('select2-hidden-accessible')
+      $v.select2({ dropdownParent: $v.parent() })
 
 $(document).ready =>
   $('.effective-datatables-filters').find('select').select2('destroy');
