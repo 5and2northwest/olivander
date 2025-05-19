@@ -76,6 +76,7 @@ module Olivander
         end
 
         def respond_with_success(resource, action)
+          @flash_key = 'success'
           return if response.body.respond_to?(:length) && response.body.length > 0
 
           if specific_redirect_path?(action)
@@ -137,6 +138,7 @@ module Olivander
         end
 
         def respond_with_error(resource, action)
+          @flash_key = 'error'
           return if response.body.present?
 
           flash.delete(:success)
