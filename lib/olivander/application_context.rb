@@ -4,21 +4,21 @@ module Olivander
   # DTO to represent the overall application context
   class ApplicationContext
     attr_accessor :name, :logo, :login_logo, :company, :menu_items,
-                  :route_builder, :sign_out_path, :sidebar_background_class,
+                  :route_builder, :sign_out_path, :sidebar_class, :sidebar_background_class,
                   :nav_container, :nav_class, :layout_container, :layout_class,
                   :sidebar, :back_to_top
 
-    DEFAULT_APPLICATION_NAME  = 'Application Name'.freeze
-    DEFAULT_SIGN_OUT_PATH     = '/users/sign_out'.freeze
-    DEFAULT_HEADER_CLASSES    = ''.freeze
-    DEFAULT_LOGO_URL          = '/images/olivander_logo.png'.freeze
-    DEFAULT_LOGO_ALT          = 'Logo Image'.freeze
-    DEFAULT_LOGIN_LOGO_URL    = '/images/olivander_login_logo.png'.freeze
-    DEFAULT_LOGIN_LOGO_ALT    = 'Login Logo Image'.freeze
-    DEFAULT_COMPANY_URL       = '/'.freeze
-    DEFAULT_COMPANY_ALT       = 'Company Name'.freeze
-    DEFAULT_LAYOUT_CLASS      = 'hold-transition sidebar-mini layout-fixed'.freeze
-    DEFAULT_NAV_CLASS         = 'navbar-expand navbar-white navbar-light'.freeze
+    DEFAULT_APPLICATION_NAME  = 'Application Name'
+    DEFAULT_SIGN_OUT_PATH     = '/users/sign_out'
+    DEFAULT_HEADER_CLASSES    = ''
+    DEFAULT_LOGO_URL          = '/images/olivander_logo.png'
+    DEFAULT_LOGO_ALT          = 'Logo Image'
+    DEFAULT_LOGIN_LOGO_URL    = '/images/olivander_login_logo.png'
+    DEFAULT_LOGIN_LOGO_ALT    = 'Login Logo Image'
+    DEFAULT_COMPANY_URL       = '/'
+    DEFAULT_COMPANY_ALT       = 'Company Name'
+    DEFAULT_LAYOUT_CLASS      = 'hold-transition sidebar-mini layout-fixed'
+    DEFAULT_NAV_CLASS         = 'navbar-expand navbar-white navbar-light'
 
     def initialize(**kwargs)
       self.name = kwargs[:name] || ENV['OLIVANDER_APP_NAME'] || DEFAULT_APPLICATION_NAME
@@ -27,10 +27,11 @@ module Olivander
       self.company = kwargs[:company] || Company.new(name: kwargs[:company_name], url: kwargs[:company_url])
       self.sign_out_path = kwargs[:sign_out_path] || DEFAULT_SIGN_OUT_PATH
       self.menu_items = kwargs[:menu_items] || []
-      self.nav_container = kwargs[:nav_container] || 'false'.freeze == 'true'.freeze
+      self.nav_container = kwargs[:nav_container] || 'false' == 'true'
       self.nav_class = kwargs[:nav_class] || DEFAULT_NAV_CLASS
-      self.layout_container = kwargs[:layout_container] || 'false'.freeze == 'true'.freeze
+      self.layout_container = kwargs[:layout_container] || 'false' == 'true'
       self.layout_class = kwargs[:layout_class] || DEFAULT_LAYOUT_CLASS
+      self.sidebar = (kwargs[:sidebar] || true)
       self.back_to_top = (kwargs[:back_to_top] || true)
       begin
         self.route_builder = RouteBuilder.new
@@ -44,15 +45,15 @@ module Olivander
     end
 
     def nav_container?
-      nav_container == true
+      nav_container.to_s == 'true'
     end
 
     def layout_container?
-      layout_container == true
+      layout_container.to_s == 'true'
     end
 
     def sidebar?
-      sidebar == true
+      sidebar.to_s == 'true'
     end
 
     def visible_modules
@@ -107,9 +108,9 @@ module Olivander
   class CurrentContext < ActiveSupport::CurrentAttributes
     attribute :application_context
     attribute :user, :ability
-    DEFAULT_USER_DISPLAY      = 'No User Set'.freeze
+    DEFAULT_USER_DISPLAY = 'No User Set'
 
-    def build(&block)
+    def build
       self.application_context ||= ::Olivander::ApplicationContext.new
       self.user ||= build_dummy_user
       self.ability ||= build_dummy_ability

@@ -173,6 +173,12 @@ module Olivander
         (is_dev_environment? ? 'bg-danger' : 'bg-info')
     end
 
+    def sidebar_class
+      Olivander::CurrentContext.application_context.sidebar_class ||
+        ENV['SIDEBAR_CLASS'] ||
+        'sidebar-dark-primary'
+    end
+
     def header_page_title
       [is_dev_environment? ? sidebar_context_suffix.upcase : nil, page_title].reject(&:blank?).join(' ')
     end

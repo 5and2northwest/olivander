@@ -26,13 +26,13 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'chartkick', '5.0.5'
   spec.add_dependency 'devise', '4.9.3'
+  spec.add_dependency 'effective_bootstrap', '1.17.6'
   spec.add_dependency 'effective_datatables', '4.24.1'
   spec.add_dependency 'effective_resources', '2.19.8'
-  spec.add_dependency 'effective_bootstrap', '1.17.6'
+  spec.add_dependency 'ffi', '~> 1.16'
   spec.add_dependency 'haml-rails', '~> 2.0'
   spec.add_dependency 'net-http', '~> 0.4'
-  spec.add_dependency 'rails', '~> 7.0'
+  spec.add_dependency 'rails', '>= 7.0'
   spec.add_dependency 'simple_form', '5.3.0'
   spec.add_dependency 'view_component', '3.10.0'
-  spec.add_dependency 'ffi', '~> 1.16'
 end

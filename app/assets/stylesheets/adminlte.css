@@ -62,3 +62,5 @@ table.dataTable.table-striped > tbody > tr:nth-of-type(2n+1) { background: rgba(
 }
 /* Hover effect */
 #back-to-top:hover { background-color: #999; color: white; }
+.nav-sidebar.nav-child-indent   .nav-treeview > .nav-item > .nav-link { padding-left: 1rem; }
+.nav-sidebar.nav-child-indent   .nav-treeview > .nav-item > .nav-treeview > .nav-item > .nav-link { padding-left: 1rem; }
