@@ -1,0 +1,33 @@
+- content_for tab_strip_id do
+  %ul.nav.nav-tabs{id: id, role: "tablist"}
+    - tabs.each_with_index do |tab, index|
+      %li.nav-item
+        %a.nav-link{ 
+          id: "#{tab.id}-tab", 
+          href: "##{tab.id}", 
+          "data-toggle": "tab", 
+          role: "tab", 
+          "aria-controls": tab.id, 
+          "aria-selected": tab.active, 
+          class: ("nav-link active" if tab.active) 
+        }
+          = tab.title
+- content_for tab_content_id do
+  .tab-content.mt-2{id: "#{id}-content"}
+    - tabs.each do |tab|
+      .tab-pane.fade{ 
+        id: tab.id, 
+        role: "tabpanel", 
+        "aria-labelledby": "#{tab.id}-tab", 
+        class: ("tab-pane fade show active" if tab.active) 
+      }
+        = tab
+- if card
+  .card.card-tabs{ class: card_class }
+    .card-header.p-0.pt-1
+      = content_for tab_strip_id
+    .card-body
+      = content_for tab_content_id
+- else
+  = content_for tab_strip_id
+  = content_for tab_content_id

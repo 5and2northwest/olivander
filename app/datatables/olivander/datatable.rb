@@ -41,6 +41,8 @@ module Olivander
         dc = collection.nil? ? klazz.all : collection
 
         attributes.each do |att|
+          next if att[0].to_s == 'deleted_at' && klazz.respond_to?(:paranoid?) && klazz.paranoid?
+
           dc = dc.where("#{att[0]} = ?", att[1]) if klazz_attributes.include?(att[0].to_s)
         end
 
