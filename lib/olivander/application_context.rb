@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "ostruct"
 
 module Olivander
   # DTO to represent the overall application context
