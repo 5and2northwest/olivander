@@ -1,0 +1,8 @@
+<% module_namespacing do -%>
+# frozen_string_literal: true
+
+# Controller class for <%= plural_table_name %> table
+class <%= class_name %>Controller < ApplicationController
+  include Olivander::Resources::CrudController
+end
+<% end -%>

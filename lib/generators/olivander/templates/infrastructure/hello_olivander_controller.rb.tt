@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+# a default landing page for Olivander
+class HelloOlivanderController < ApplicationController
+  layout 'olivander/adminlte/main'
+
+  def index
+    @page_title = 'Welcome to Olivander'
+    render({html: "This is only the beginning...".html_safe, layout: true})
+  end
+end

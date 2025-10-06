@@ -1,0 +1,8 @@
+<% module_namespacing do -%>
+# frozen_string_literal: true
+
+# RouteBuilder for Olivander
+class RouteBuilder
+  include Olivander::Resources::RouteBuilder
+end
+<% end %>

@@ -1,0 +1,16 @@
+class ContextBuilder
+  include Rails.application.routes.url_helpers
+
+  def self.build_context
+    builder = ContextBuilder.new
+    Olivander::CurrentContext.build do |_ctx, app_ctx, _user, _ability|
+      app_ctx.name = 'Set Your System Name'
+      app_ctx.logo.url = '/images/logo.png'
+      app_ctx.logo.alt = 'Set Your Logo Alt Text'
+      app_ctx.company.name = 'Set Your Company Name'
+      app_ctx.menu_items = MenuBuilder.build_menu_items
+      app_ctx.route_builder = RouteBuilder
+      app_ctx.sign_out_path = builder.root_path
+    end.application_context
+  end
+end

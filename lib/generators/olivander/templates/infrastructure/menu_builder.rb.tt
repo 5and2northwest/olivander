@@ -1,0 +1,32 @@
+class MenuBuilder
+  include Rails.application.routes.url_helpers
+
+  def self.build_menu_items
+    builder = MenuBuilder.new
+    [
+      builder.build_menu_item(key: 'root', url: builder.root_path),
+    ]
+  end
+
+  def condition_proc(verb, noun)
+    proc { Olivander::CurrentContext.ability.can? verb, noun }
+  end
+
+  def build_menu_item(key: nil, controller: nil, action: nil, url: nil, is_module: false, condition: nil, items: nil)
+    url ||= url_for(controller:, action:, only_path: true)
+    key ||= url.gsub('.', '_').gsub(' ', '_')
+
+    condition = proc { true } if !condition && is_module
+
+    unless items
+      submenu_key = "#{key.gsub('.', '_')}_submenu"
+      items = proc { send(submenu_key) } if respond_to?(submenu_key)
+    end
+
+    key = key.gsub('help.', '') if !I18n.exists?("menus.#{key}") && key.starts_with?('help.')
+    mi = Olivander::Menus::MenuItem.new(key, url, nil, is_module:)
+    mi.with_condition { condition.is_a?(Proc) ? condition.call : condition } if condition.present?
+    mi.with_submenu_items { items.call } if items.present?
+    mi
+  end
+end

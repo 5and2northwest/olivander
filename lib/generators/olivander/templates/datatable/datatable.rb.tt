@@ -1,0 +1,29 @@
+<% module_namespacing do -%>
+# frozen_string_literal: true
+
+# Datatable class for <%= plural_table_name %> table
+class <%= class_name %>Datatable < ::Olivander::Datatable
+  auto_datatable <%= class_name %>
+                # only: %w[],
+                # hide: %w[],
+                # show: %w[],
+                # scopes: %i[],
+                # collection: <%= class_name %>.all
+
+  # filters do
+  #   scope :all, default: true
+  # end
+
+  # datatable do
+  #   order :id, :desc
+<% attributes.each do |attribute| -%>
+  #   col :<%= attribute.name %>
+<% end -%>
+  #   actions_col
+  # end
+
+  # collection do
+  #   <%= class_name %>.all
+  # end
+end
+<% end -%>

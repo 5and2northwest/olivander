@@ -63,10 +63,11 @@ module Olivander
     end
 
     class RoutedResource
-      attr_accessor :model, :namespaces, :actions
+      attr_accessor :model, :nested_models, :namespaces, :actions
 
       def initialize(model, namespaces, crud_actions)
         self.model = model
+        self.nested_models = []
         self.namespaces = namespaces
         self.actions = []
         %i[index new create edit show update destroy].each do |ca|
@@ -134,10 +135,15 @@ module Olivander
 
       class_methods do
         def resource(model, only: DEFAULT_CRUD_ACTIONS, except: [], namespaces: [])
+          parent_resource = self.current_resource
           self.current_resource = RoutedResource.new(model, namespaces, DEFAULT_CRUD_ACTIONS & (only - except))
+          if parent_resource
+            parent_resource.nested_models << self.current_resource
+          else
+            resources[model] = current_resource
+          end
           yield if block_given?
-          resources[model] = current_resource
-          self.current_resource = nil
+          self.current_resource = parent_resource
         end
 
         def action(sym, **kwargs)
@@ -171,43 +177,51 @@ module Olivander
               build_resource_route(mapper, r, r.namespaces.last(r.namespaces.size - 1))
             end
           else
-            mapper.resources r.model, only: [] do
-              mapper.collection do
-                r.collection_actions.each do |ba|
-                  next if ba.no_route
-                  next if ba.action == :new
-
-                  if ba.confirm
-                    mapper.get ba.action, action: "confirm_#{ba.action}"
-                    set_controller_and_helper(ba)
-                    mapper.post ba.action
-                  else
-                    mapper.send(ba.verb, ba.action)
-                    set_controller_and_helper(ba)
-                  end
+            map_it(mapper, r)
+          end
+        end
+        
+        def map_it(mapper, r)
+          mapper.resources r.model, only: [] do
+            mapper.collection do
+              r.collection_actions.each do |ba|
+                next if ba.no_route
+                next if ba.action == :new
+  
+                if ba.confirm
+                  mapper.get ba.action, action: "confirm_#{ba.action}"
+                  set_controller_and_helper(ba)
+                  mapper.post ba.action
+                else
+                  mapper.send(ba.verb, ba.action)
+                  set_controller_and_helper(ba)
                 end
               end
-
-              if r.collection_actions.select { |x| x.action == :new }.size.positive?
-                mapper.new do
-                  mapper.get :new
+            end
+  
+            if r.collection_actions.select { |x| x.action == :new }.size.positive?
+              mapper.new do
+                mapper.get :new
+              end
+            end
+  
+            mapper.member do
+              r.member_actions.each do |ma|
+                next if ma.no_route
+  
+                if ma.confirm
+                  mapper.get ma.action, action: "confirm_#{ma.action}"
+                  set_controller_and_helper(ma)
+                  mapper.post ma.action
+                else
+                  mapper.send(ma.verb, ma.action)
+                  set_controller_and_helper(ma)
                 end
               end
+            end
 
-              mapper.member do
-                r.member_actions.each do |ma|
-                  next if ma.no_route
-
-                  if ma.confirm
-                    mapper.get ma.action, action: "confirm_#{ma.action}"
-                    set_controller_and_helper(ma)
-                    mapper.post ma.action
-                  else
-                    mapper.send(ma.verb, ma.action)
-                    set_controller_and_helper(ma)
-                  end
-                end
-              end
+            r.nested_models.each do |nm|
+              map_it(mapper, nm)
             end
           end
         end
