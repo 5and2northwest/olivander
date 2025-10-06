@@ -14,7 +14,7 @@ module Olivander
         options = args.extract_options!
         @id = options[:id] || "tabs-#{SecureRandom.hex(4)}"
         @card = options.key?(:card) ? !!options[:card] : true
-        @card_class = options.key?(:card_class) ? !!options[:card_class] : 'card-primary'
+        @card_class = options.key?(:card_class) ? options[:card_class] : 'card-primary'
         @tab_strip_id = "tab-strip-#{SecureRandom.hex(4)}"
         @tab_content_id = "tab-strip-#{SecureRandom.hex(4)}"
       end

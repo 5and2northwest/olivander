@@ -23,7 +23,10 @@
                   %button.btn.btn-tool{ type: :button, 'data-card-widget': :maximize }
                     %i.fas.fa-expand
               .card-body{ style: 'height: 220px' }
-                = send(chart[:as].underscore, @datatable.to_json[:charts][k][:data], id: chart[:name], height: '90%', adapter: 'google')
+                - if chart[:as] == 'LineChart'
+                  = send(chart[:as].underscore, @datatable.to_json[:charts][k][:data].map{ |x| {name: x[0], data: x[1]}}, id: chart[:name], height: '90%')
+                - else
+                  = send(chart[:as].underscore, @datatable.to_json[:charts][k][:data], id: chart[:name], height: '90%', adapter: 'google')
 
   = content_for :datatable_charts
 

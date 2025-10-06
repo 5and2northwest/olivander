@@ -20,8 +20,11 @@ export default class extends Controller {
   transformData(chart) {
     var self = this
     if (chart.as == 'LineChart') {
-      // we don't know what to do
-      return chart.data
+      var transformed = chart.data.map(([name, obj]) => ({
+        name,
+        data: Object.entries(obj || {})
+      }));
+      return transformed
     } else {
       return chart.data
     }
