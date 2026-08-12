@@ -5,8 +5,8 @@ class Olivander::Components::ResourceShowComponent < ViewComponent::Base
   delegate :resource_field_group_label, to: :helpers
 
   def initialize(resource, actions)
+    super()
     @resource = resource
     @actions = actions
-    super
   end
 end

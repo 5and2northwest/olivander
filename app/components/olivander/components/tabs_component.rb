@@ -10,7 +10,7 @@ module Olivander
       attr_reader :id, :card, :card_class, :tab_strip_id, :tab_content_id
 
       def initialize(*args)
-        super
+        super()
         options = args.extract_options!
         @id = options[:id] || "tabs-#{SecureRandom.hex(4)}"
         @card = options.key?(:card) ? !!options[:card] : true
@@ -23,7 +23,7 @@ module Olivander
         attr_reader :title, :id, :active
 
         def initialize(title:, id: "tab-#{SecureRandom.hex(6)}", active: false)
-          super
+          super()
           @title = title
           @id = id
           @active = active

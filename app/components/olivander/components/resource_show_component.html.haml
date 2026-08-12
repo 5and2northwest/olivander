@@ -7,7 +7,7 @@
           %td{ style: 'width: 8.33%; height: 0px' }
     %tbody
       - rfg.sections.each do |section|
-        - section.fields.each_slice(section.columns) do |slice|
+        - section.show_fields.each_slice(section.columns) do |slice|
           - colspan = (12 - slice.size) / section.columns
           %tr
             - slice.each do |f|

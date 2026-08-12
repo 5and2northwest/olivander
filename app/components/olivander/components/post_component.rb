@@ -7,7 +7,7 @@ module Olivander
       delegate :user_image_path, to: :helpers
 
       def initialize(poster, posted, updated, text: nil, id: nil, avatar_url: nil)
-        super
+        super()
         @poster = poster
         @posted = posted
         @updated = updated

@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.summary     = 'Summary of Olivander.'
   spec.description = 'Description of Olivander.'
   spec.license     = 'MIT'
+  spec.required_ruby_version = '>= 3.2.0'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -25,14 +26,14 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency 'chartkick', '5.0.5'
-  spec.add_dependency 'devise', '4.9.3'
-  spec.add_dependency 'effective_bootstrap', '1.17.6'
-  spec.add_dependency 'effective_datatables', '>= 4.24.1'
-  spec.add_dependency 'effective_resources', '2.19.8'
+  spec.add_dependency 'devise', '~> 5.0.3'
+  spec.add_dependency 'effective_bootstrap', '~> 1.22.2'
+  spec.add_dependency 'effective_datatables', '~> 4.37.2'
+  spec.add_dependency 'effective_resources', '~> 2.37.6'
   spec.add_dependency 'ffi', '~> 1.16'
   spec.add_dependency 'haml-rails', '~> 2.0'
   spec.add_dependency 'net-http', '~> 0.4'
-  spec.add_dependency 'rails', '>= 7.0'
-  spec.add_dependency 'simple_form', '5.3.0'
-  spec.add_dependency 'view_component', '>= 3.10.0'
+  spec.add_dependency 'rails', '~> 8.0'
+  spec.add_dependency 'simple_form', '~> 5.3.0'
+  spec.add_dependency 'view_component', '~> 4.12.0'
 end

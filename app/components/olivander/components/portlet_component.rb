@@ -7,7 +7,7 @@ module Olivander
       renders_one :header_tools
 
       def initialize(title, *args)
-        super
+        super()
         @title = title
         options = args.extract_options!
         @card_type = options[:card_type] || 'card-default'

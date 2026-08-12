@@ -5,9 +5,9 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
   delegate :field_label_for, to: :helpers
 
   def initialize(resource, form_builder)
+    super()
     @resource = resource
     @f = form_builder
-    super
   end
 
   def collection_for(field)

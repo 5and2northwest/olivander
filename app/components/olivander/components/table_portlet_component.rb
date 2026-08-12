@@ -7,7 +7,7 @@ module Olivander
       renders_one :footer_buttons
 
       def initialize(collection, *args)
-        super
+        super()
         options = args.extract_options!
         @collection = collection
         @builder = options[:builder]
@@ -29,7 +29,7 @@ module Olivander
         delegate :user_image_path, to: :helpers
 
         def initialize(item:, item_iteration:, builder:, headers:)
-          super
+          super()
           @item = item
           @item_iteration = item_iteration
           @builder = builder

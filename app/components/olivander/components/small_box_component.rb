@@ -16,7 +16,7 @@ module Olivander
         src: nil,
         overlay: 'dark'
         )
-        super
+        super()
         @background = background
         @primary_text = primary_text
         @secondary_text = secondary_text
