@@ -3,9 +3,11 @@ class DateTimeInput < SimpleForm::Inputs::Base
     raw_value = parse_value(object.public_send(attribute_name), options[:date_format])
 
     disabled = options[:disabled] || false
-
-    hash = { id: "#{attribute_name}_datetimepicker", class: 'form-control datetimepicker-input', value: raw_value,
-             disabled: disabled, 'data-toggle': 'datetimepicker', 'data-target': "##{attribute_name}_datetimepicker", autocomplete: 'off' }
+    field_name = @builder.field_name(attribute_name)
+    field_id   = @builder.field_id(attribute_name)
+    picker_id  = "#{field_id}_datetimepicker"
+    hash = { id: picker_id, name: field_name, class: 'form-control datetimepicker-input', value: raw_value,
+             disabled: disabled, 'data-toggle': 'datetimepicker', 'data-target': "##{picker_id}", autocomplete: 'off' }
     data = options[:data] || {}
     data.keys.each do |d|
       hash["data-#{d.to_s.dasherize}".to_sym] = data[d]
@@ -17,7 +19,7 @@ class DateTimeInput < SimpleForm::Inputs::Base
     add_on = template.content_tag(:div, class: 'input-group-prepend') do
       add_on = template.content_tag(:div, class: 'input-group-text') do
         hash = { class: add_on_class, 'data-toggle': 'datetimepicker',
-                 'data-target': "##{attribute_name}_datetimepicker" }
+                 'data-target': "##{picker_id}" }
         template.content_tag(:i, '', hash)
       end
     end
@@ -31,7 +33,7 @@ class DateTimeInput < SimpleForm::Inputs::Base
       script = ''"
         <script>
         $(document).ready(function() {
-          $('##{attribute_name}_datetimepicker').datetimepicker(
+          $('##{picker_id}').datetimepicker(
             #{picker_options.to_json}
           );
         });
