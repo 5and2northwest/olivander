@@ -4,7 +4,7 @@ class Olivander::Components::MenuItemComponent < ViewComponent::Base
   attr_reader :menu_item
 
   def initialize(menu_item)
-    super
+    super()
     @menu_item = menu_item
   end
 end

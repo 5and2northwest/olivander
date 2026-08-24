@@ -7,6 +7,6 @@ class Olivander::Components::ResourceShowComponent < ViewComponent::Base
   def initialize(resource, actions)
     @resource = resource
     @actions = actions
-    super
+    super()
   end
 end

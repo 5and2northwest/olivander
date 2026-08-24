@@ -7,7 +7,7 @@ class Olivander::Components::ResourceFormComponent < ViewComponent::Base
   def initialize(resource, form_builder)
     @resource = resource
     @f = form_builder
-    super
+    super()
   end
 
   def collection_for(field)

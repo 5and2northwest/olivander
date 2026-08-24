@@ -3,7 +3,7 @@
     %h3= resource_field_group_label(@resource.class, rfg.key) unless rfg.key == :default
     - rfg.sections.each do |section|
       .row
-        - section.fields.each do |field|
+        - section.form_fields.each do |field|
           - label = field_label_for(@resource.class, field.sym)
           %div{ class: section.column_class }
             - if association?(field)
